@@ -4,12 +4,12 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from '/imports/ui/reducers';
-import { renderRoutes } from '/imports/startup/client/routes';
+import AppRouter from '/imports/startup/client/AppRouter';
 
 Meteor.startup(() => {
   render(
     <Provider store={createStore(reducers)}>
-      {renderRoutes()}
+      <AppRouter />
     </Provider>,
     document.getElementById('react-target')
   );
