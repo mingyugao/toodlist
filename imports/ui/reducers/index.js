@@ -1,88 +1,19 @@
 import { combineReducers } from 'redux';
+import signInReducer from './SignIn';
+import forgotPasswordReducer from './ForgotPassword';
+import signUpReducer from './SignUp';
 
-const signInReducer = (
-  state = {
-    email: '',
-    password: '',
-    isLoading: false
-  },
-  action
-) => {
-  switch (action.type) {
-    case 'SIGN_IN_ON_CHANGE_EMAIL':
-      return {
-        ...state,
-        email: action.payload
-      };
-    case 'SIGN_IN_ON_CHANGE_PASSWORD':
-      return {
-        ...state,
-        password: action.payload
-      };
-    case 'SIGN_IN_REQUEST':
-      return {
-        ...state,
-        isLoading: true
-      };
-    case 'SIGN_IN_SUCCESS':
-      return {
-        ...state,
-        email: '',
-        password: '',
-        isLoading: false
-      };
-    case 'SIGN_IN_FAILURE':
-      return {
-        ...state,
-        isLoading: false
-      };
-    default:
-      return state;
-  }
-};
-
-const signUpReducer = (
-  state = {
-    email: '',
-    password: '',
-    isLoading: false
-  },
-  action
-) => {
-  switch (action.type) {
-    case 'SIGN_UP_ON_CHANGE_EMAIL':
-      return {
-        ...state,
-        email: action.payload
-      };
-    case 'SIGN_UP_ON_CHANGE_PASSWORD':
-      return {
-        ...state,
-        password: action.payload
-      };
-    case 'SIGN_UP_REQUEST':
-      return {
-        ...state,
-        isLoading: true
-      };
-    case 'SIGN_UP_SUCCESS':
-      return {
-        ...state,
-        email: '',
-        password: '',
-        isLoading: false
-      };
-    case 'SIGN_UP_FAILURE':
-      return {
-        ...state,
-        isLoading: false
-      };
-    default:
-      return state;
-  }
-};
-
-export default combineReducers({
+const appReducer = combineReducers({
   signIn: signInReducer,
+  forgotPassword: forgotPasswordReducer,
   signUp: signUpReducer
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'SIGN_OUT') {
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+export default rootReducer;

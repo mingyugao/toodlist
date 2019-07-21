@@ -11,7 +11,7 @@ import {
   signUpRequest,
   signUpSuccess,
   signUpFailure
-} from '../actions';
+} from '../actions/SignUp';
 
 const { Title } = Typography;
 

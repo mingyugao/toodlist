@@ -28,6 +28,7 @@ const mapDispatchToProps = dispatch => {
   return {
     signOut: history => {
       Meteor.logout(err => {
+        dispatch({ type: 'SIGN_OUT' });
         history.push('/');
       })
     }

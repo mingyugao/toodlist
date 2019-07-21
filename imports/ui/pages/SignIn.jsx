@@ -11,7 +11,7 @@ import {
   signInRequest,
   signInSuccess,
   signInFailure
-} from '../actions';
+} from '../actions/SignIn';
 
 const { Title } = Typography;
 
