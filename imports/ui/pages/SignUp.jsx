@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Typography from 'antd/lib/typography';
 import Input from 'antd/lib/input';
+import Icon from 'antd/lib/icon';
 import Button from 'antd/lib/button';
 import { Link } from 'react-router-dom';
 import notification from 'antd/lib/notification';
@@ -25,27 +26,34 @@ const SignUp = ({
   signUp
 }) => (
   <div id="sign-up">
-    <Title>Sign Up</Title>
-    <Input
-      placeholder="Email"
-      value={email}
-      onChange={e => onChangeEmail(e.target.value)}
-    />
-    <Input.Password
-      placeholder="Password"
-      value={password}
-      onChange={e => onChangePassword(e.target.value)}
-    />
-    <Button
-      loading={isLoading}
-      type="primary"
-      onClick={() => signUp(email, password, history)}
-    >
-      Sign Up
-    </Button>
-    <Link to="/">
-      Sign In
-    </Link>
+    <div>
+      <Title>todolist</Title>
+      <div>
+        <Input
+          placeholder="Email"
+          prefix={<Icon type="mail" />}
+          value={email}
+          onChange={e => onChangeEmail(e.target.value)}
+        />
+        <Input.Password
+          placeholder="Password"
+          prefix={<Icon type="lock" />}
+          value={password}
+          onChange={e => onChangePassword(e.target.value)}
+        />
+        <Button
+          loading={isLoading}
+          type="primary"
+          block
+          onClick={() => signUp(email, password, history)}
+        >
+          Create Account
+        </Button>
+      </div>
+      <Link to="/">
+        I already have an account!
+      </Link>
+    </div>
   </div>
 );
 

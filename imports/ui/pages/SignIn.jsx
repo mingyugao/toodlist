@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Typography from 'antd/lib/typography';
 import Input from 'antd/lib/input';
+import Icon from 'antd/lib/icon';
 import Button from 'antd/lib/button';
 import { Link } from 'react-router-dom';
 import notification from 'antd/lib/notification';
@@ -25,30 +26,38 @@ const SignIn = ({
   signIn
 }) => (
   <div id="sign-in">
-    <Title>Sign In</Title>
-    <Input
-      placeholder="Email"
-      value={email}
-      onChange={e => onChangeEmail(e.target.value)}
-    />
-    <Input.Password
-      placeholder="Password"
-      value={password}
-      onChange={e => onChangePassword(e.target.value)}
-    />
-    <Link to="/forgot_password">
-      Forgot password?
-    </Link>
-    <Button
-      loading={isLoading}
-      type="primary"
-      onClick={() => signIn(email, password, history)}
-    >
-      Sign In
-    </Button>
-    <Link to="/signup">
-      Create an account
-    </Link>
+    <div>
+      <Title>todolist</Title>
+      <div>
+        <Input
+          placeholder="Email"
+          prefix={<Icon type="mail" />}
+          value={email}
+          onChange={e => onChangeEmail(e.target.value)}
+        />
+        <Input.Password
+          placeholder="Password"
+          prefix={<Icon type="lock" />}
+          value={password}
+          onChange={e => onChangePassword(e.target.value)}
+        />
+        <Link to="/forgot_password">
+          Forgot password?
+        </Link>
+        <Button
+          loading={isLoading}
+          type="primary"
+          block
+          onClick={() => signIn(email, password, history)}
+        >
+          Log In
+        </Button>
+      </div>
+      Or
+      <Link to="/signup">
+        &nbsp;create an account!
+      </Link>
+    </div>
   </div>
 );
 
