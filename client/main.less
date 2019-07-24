@@ -1,7 +1,7 @@
 @import 'theme.less';
 
 body {
-  background-image: url(/minified_four_horsemen.png);
+  background-image: url(/minified_opaque_four_horsemen.png);
   background-repeat: repeat;
   background-position: top center;
   background-size: 300px 250px;
@@ -99,6 +99,69 @@ body {
       }
 
       & > button { margin-top: 1rem; }
+    }
+  }
+}
+
+#home {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100vh;
+
+  & > div:nth-of-type(1) {
+    height: 100%;
+    padding: 1rem 1rem;
+
+    & > span { cursor: pointer; }
+  }
+
+  & > div:nth-of-type(2) {
+    & > div.column {
+      background-color: white;
+      border: 1px solid @border-color;
+      border-radius: 5px;
+      margin-top: 1rem;
+      margin-left: 1rem;
+      padding: 0.5rem;
+      width: 18rem;
+
+      & > div:nth-of-type(1) {
+        display: flex;
+        justify-content: space-between;
+
+        & > h4 {
+          border: 1px solid transparent;
+          border-radius: 5px;
+          margin: 0;
+          padding: 1px 0.5rem;
+          width: 88%;
+
+          &:hover { border-color: @border-color; }
+        }
+
+        & > input {
+          border-radius: 5px;
+          font-size: 20px;
+          font-weight: 600;
+          padding: 0 0.5rem;
+          width: 88%;
+        }
+
+        & > button {
+          margin-top: 0.2rem;
+          margin-right: 0.2rem;
+        }
+      }
+
+      & > div:nth-of-type(2) > div {
+        background-color: white;
+        border: 1px solid @border-color;
+        border-radius: 5px;
+        margin-top: 0.2rem;
+        padding: 0.5rem;
+      }
     }
   }
 }
