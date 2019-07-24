@@ -16,3 +16,22 @@ export const columnUpdateTitleFailure = () => {
     type: 'COLUMN_UPDATE_TITLE_FAILURE'
   };
 };
+
+export const columnCreateTodoRequest = (cid, todoContent) => {
+  return {
+    type: 'COLUMN_CREATE_TODO_REQUEST',
+    payload: { cid, todoContent }
+  }
+};
+
+export const columnCreateTodoSuccess = () => {
+  return {
+    type: 'COLUMN_CREATE_TODO_SUCCESS'
+  }
+};
+
+export const columnCreateTodoFailure = () => {
+  return {
+    type: 'COLUMN_CREATE_TODO_FAILURE'
+  }
+};

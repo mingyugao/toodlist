@@ -2,33 +2,50 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Typography from 'antd/lib/typography';
 import Input from 'antd/lib/input';
-import Button from 'antd/lib/button';
 import { Droppable } from 'react-beautiful-dnd';
+import Icon from 'antd/lib/icon';
 import Todo from './Todo';
 import {
   columnUpdateTitleRequest,
   columnUpdateTitleSuccess,
-  columnUpdateTitleFailure
+  columnUpdateTitleFailure,
+  columnCreateTodoRequest,
+  columnCreateTodoSuccess,
+  columnCreateTodoFailure
 } from '../actions/Column';
 
 const { Title } = Typography;
 
 class Column extends Component {
   state = {
-    isInputVisible: false
+    isTitleInputVisible: false,
+    isTodoInputVisible: false
   };
 
   componentDidUpdate = (_, prevState) => {
     if (
-      prevState.isInputVisible === false &&
-      this.state.isInputVisible
+      prevState.isTitleInputVisible === false &&
+      this.state.isTitleInputVisible
     ) {
-      this.input.focus();
+      this.titleInput.focus();
+    } else if (
+      prevState.isTodoInputVisible === false &&
+      this.state.isTodoInputVisible
+    ) {
+      this.todoInput.focus();
     }
   };
 
-  editTitle = () => {
-    this.setState({ isInputVisible: true });
+  saveTitleRef = ref => (this.titleInput = ref);
+
+  saveTodoRef = ref => (this.todoInput = ref);
+
+  toggleEditTitle = () => {
+    this.setState({ isTitleInputVisible: true });
+  };
+
+  toggleNewTodo = () => {
+    this.setState({ isTodoInputVisible: true });
   };
 
   updateTitle = e => {
@@ -36,10 +53,16 @@ class Column extends Component {
       this.props.column.id,
       e.target.value
     );
-    this.setState({ isInputVisible: false });
+    this.setState({ isTitleInputVisible: false });
   };
 
-  saveRef = ref => (this.input = ref);
+  createTodo = e => {
+    this.props.createTodo(
+      this.props.column.id,
+      e.target.value
+    );
+    this.setState({ isTodoInputVisible: false });
+  };
 
   render() {
     const {
@@ -50,28 +73,22 @@ class Column extends Component {
     return (
       <div className="column">
         <div>
-          {!this.state.isInputVisible && (
+          {!this.state.isTitleInputVisible && (
             <Title
               level={4}
-              onClick={this.editTitle}
+              onClick={this.toggleEditTitle}
             >
               {column.title}
             </Title>
           )}
-          {this.state.isInputVisible && (
+          {this.state.isTitleInputVisible && (
             <Input
-              ref={this.saveRef}
+              ref={this.saveTitleRef}
               defaultValue={column.title}
               onBlur={this.updateTitle}
               onPressEnter={this.updateTitle}
             />
           )}
-          <Button
-            icon="plus"
-            shape="circle"
-            size="small"
-            onClick={() => {}}
-          />
         </div>
         <Droppable droppableId={column.id}>
           {provided => (
@@ -87,6 +104,23 @@ class Column extends Component {
                 />
               ))}
               {provided.placeholder}
+              {!this.state.isTodoInputVisible && (
+                <div
+                  className="todo todo-add-placeholder"
+                  onClick={this.toggleNewTodo}
+                >
+                  <Icon type="plus" />&nbsp;new item
+                </div>
+              )}
+              {this.state.isTodoInputVisible && (
+                <Input
+                  className="todo todo-add-input"
+                  ref={this.saveTodoRef}
+                  defaultValue=""
+                  onBlur={this.createTodo}
+                  onPressEnter={this.createTodo}
+                />
+              )}
             </div>
           )}
         </Droppable>
@@ -104,6 +138,11 @@ const mapDispatchToProps = dispatch => {
     updateTitle: (cid, title) => {
       if (title) {
         dispatch(columnUpdateTitleRequest(cid, title));
+      }
+    },
+    createTodo: (cid, todoContent) => {
+      if (todoContent) {
+        dispatch(columnCreateTodoRequest(cid, todoContent));
       }
     }
   };

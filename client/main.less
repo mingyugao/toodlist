@@ -125,7 +125,7 @@ body {
       margin-top: 1rem;
       margin-left: 1rem;
       padding: 0.5rem;
-      width: 18rem;
+      width: 22rem;
 
       & > div:nth-of-type(1) {
         display: flex;
@@ -136,9 +136,12 @@ body {
           border-radius: 5px;
           margin: 0;
           padding: 1px 0.5rem;
-          width: 88%;
+          width: 100%;
 
-          &:hover { border-color: @border-color; }
+          &:hover {
+            border-color: @border-color;
+            cursor: default;
+          }
         }
 
         & > input {
@@ -146,21 +149,46 @@ body {
           font-size: 20px;
           font-weight: 600;
           padding: 0 0.5rem;
-          width: 88%;
-        }
-
-        & > button {
-          margin-top: 0.2rem;
-          margin-right: 0.2rem;
+          width: 100%;
         }
       }
 
-      & > div:nth-of-type(2) > div {
-        background-color: white;
-        border: 1px solid @border-color;
-        border-radius: 5px;
-        margin-top: 0.2rem;
-        padding: 0.5rem;
+      & > div:nth-of-type(2) {
+        min-height: 12rem;
+
+        & > .todo {
+          display: flex;
+          justify-content: space-between;
+          background-color: white;
+          border: 1px solid @border-color;
+          border-radius: 5px;
+          margin-top: 0.3rem;
+          padding: 0.5rem;
+
+          &.todo-add-placeholder {
+            justify-content: center;
+            border-style: dashed;
+            color: darkgrey;
+            cursor: pointer;
+
+            & > i { margin-top: 4px; }
+          }
+
+          &.todo-add-input {
+            height: 39px;
+          }
+
+          & > span:nth-of-type(2) {
+            min-width: 51px;
+
+            & > a {
+              color: darkgrey;
+
+              &:nth-of-type(1):hover { color: @link-color; }
+              &:nth-of-type(2):hover { color: red; }
+            }
+          }
+        }
       }
     }
   }
