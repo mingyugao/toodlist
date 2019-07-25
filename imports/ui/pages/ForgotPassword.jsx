@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
@@ -21,7 +22,7 @@ const ForgotPassword = ({
   isSent,
   onChangeEmail,
   sendPasswordResetLink
-}) => (
+}) => !Meteor.userId ? (
   <div id="forgot-password">
     <div>
       <Title>Reset Password</Title>
@@ -50,7 +51,7 @@ const ForgotPassword = ({
       )}
     </div>
   </div>
-);
+) : <Redirect to="/" />;
 
 const mapStateToProps = state => {
   return {

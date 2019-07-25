@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
@@ -24,7 +24,7 @@ const SignIn = ({
   onChangeEmail,
   onChangePassword,
   signIn
-}) => (
+}) => !Meteor.userId() ? (
   <div id="sign-in">
     <div>
       <Title>todolist</Title>
@@ -59,7 +59,7 @@ const SignIn = ({
       </Link>
     </div>
   </div>
-);
+) : <Redirect to="/" />;
 
 const mapStateToProps = state => {
   return {
