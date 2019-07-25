@@ -22,3 +22,9 @@ export const homeDragAndDropFailure = () => {
     type: 'HOME_DRAG_AND_DROP_FAILURE'
   };
 };
+
+export const homeCreateTodolist = () => {
+  return {
+    type: 'HOME_CREATE_TODOLIST'
+  };
+};

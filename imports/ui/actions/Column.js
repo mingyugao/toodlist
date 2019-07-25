@@ -17,6 +17,25 @@ export const columnUpdateTitleFailure = () => {
   };
 };
 
+export const columnDeleteTodolistRequest = cid => {
+  return {
+    type: 'COLUMN_DELETE_TODOLIST_REQUEST',
+    payload: cid
+  };
+};
+
+export const columnDeleteTodolistSuccess = () => {
+  return {
+    type: 'COLUMN_DELETE_TODOLIST_SUCCESS'
+  };
+};
+
+export const columnDeleteTodolistFailure = () => {
+  return {
+    type: 'COLUMN_DELETE_TODOLIST_FAILURE'
+  };
+};
+
 export const columnCreateTodoRequest = (cid, todoContent) => {
   return {
     type: 'COLUMN_CREATE_TODO_REQUEST',

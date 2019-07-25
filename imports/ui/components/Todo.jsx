@@ -1,21 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Draggable } from 'react-beautiful-dnd';
 import Icon from 'antd/lib/icon';
+import { Draggable } from 'react-beautiful-dnd';
 import {
   todoEditRequest,
   todoEditSuccess,
   todoEditFailure,
-  todoRemoveRequest,
-  todoRemoveSuccess,
-  todoRemoveFailure
+  todoDeleteRequest,
+  todoDeleteSuccess,
+  todoDeleteFailure
 } from '../actions/Todo';
 
 const Todo = ({
   index,
   todo,
   editTodo,
-  removeTodo
+  deleteTodo
 }) => (
   <Draggable
     draggableId={todo.id}
@@ -32,7 +32,7 @@ const Todo = ({
         <span>
           <a onClick={() => editTodo(todo)}>edit</a>
           {' | '}
-          <a onClick={() => removeTodo(todo)}><Icon type="delete" /></a>
+          <a onClick={() => deleteTodo(todo)}><Icon type="delete" /></a>
       </span>
       </div>
     )}
@@ -48,8 +48,8 @@ const mapDispatchToProps = dispatch => {
     editTodo: todo => {
       dispatch(todoEditRequest(todo));
     },
-    removeTodo: todo => {
-      dispatch(todoRemoveRequest(todo));
+    deleteTodo: todo => {
+      dispatch(todoDeleteRequest(todo));
     }
   };
 };

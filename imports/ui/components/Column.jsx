@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Typography from 'antd/lib/typography';
-import Input from 'antd/lib/input';
-import { Droppable } from 'react-beautiful-dnd';
+import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
+import Input from 'antd/lib/input';
+import Popconfirm from 'antd/lib/popconfirm';
+import Typography from 'antd/lib/typography';
+import { Droppable } from 'react-beautiful-dnd';
 import Todo from './Todo';
 import {
   columnUpdateTitleRequest,
   columnUpdateTitleSuccess,
   columnUpdateTitleFailure,
+  columnDeleteTodolistRequest,
+  columnDeleteTodolistSuccess,
+  columnDeleteTodolistFailure,
   columnCreateTodoRequest,
   columnCreateTodoSuccess,
   columnCreateTodoFailure
@@ -23,15 +28,14 @@ class Column extends Component {
   };
 
   componentDidUpdate = (_, prevState) => {
-    if (
-      prevState.isTitleInputVisible === false &&
-      this.state.isTitleInputVisible
-    ) {
+    const {
+      isTitleInputVisible,
+      isTodoInputVisible
+    } = this.state;
+
+    if (!prevState.isTitleInputVisible && isTitleInputVisible) {
       this.titleInput.focus();
-    } else if (
-      prevState.isTodoInputVisible === false &&
-      this.state.isTodoInputVisible
-    ) {
+    } else if (!prevState.isTodoInputVisible && isTodoInputVisible) {
       this.todoInput.focus();
     }
   };
@@ -64,11 +68,17 @@ class Column extends Component {
     this.setState({ isTodoInputVisible: false });
   };
 
+  createTodoAndFocusInput = e => {
+    this.props.createTodo(
+      this.props.column.id,
+      e.target.value
+    );
+    this.todoInput.state.value = "";
+    this.todoInput.focus();
+  };
+
   render() {
-    const {
-      column,
-      todos
-    } = this.props;
+    const { column, todos, deleteTodolist } = this.props;
 
     return (
       <div className="column">
@@ -89,6 +99,19 @@ class Column extends Component {
               onPressEnter={this.updateTitle}
             />
           )}
+          <Popconfirm
+            okType="danger"
+            title="Delete todolist?"
+            icon={<Icon type="warning" />}
+            onConfirm={() => deleteTodolist(column.id)}
+          >
+            <Button
+              icon="close"
+              shape="circle"
+              size="small"
+              type="danger"
+            />
+          </Popconfirm>
         </div>
         <Droppable droppableId={column.id}>
           {provided => (
@@ -118,7 +141,7 @@ class Column extends Component {
                   ref={this.saveTodoRef}
                   defaultValue=""
                   onBlur={this.createTodo}
-                  onPressEnter={this.createTodo}
+                  onPressEnter={this.createTodoAndFocusInput}
                 />
               )}
             </div>
@@ -139,6 +162,9 @@ const mapDispatchToProps = dispatch => {
       if (title) {
         dispatch(columnUpdateTitleRequest(cid, title));
       }
+    },
+    deleteTodolist: cid => {
+      dispatch(columnDeleteTodolistRequest(cid));
     },
     createTodo: (cid, todoContent) => {
       if (todoContent) {

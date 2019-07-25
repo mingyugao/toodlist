@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Typography from 'antd/lib/typography';
-import Input from 'antd/lib/input';
-import Icon from 'antd/lib/icon';
-import Button from 'antd/lib/button';
 import { Link } from 'react-router-dom';
+import Button from 'antd/lib/button';
+import Icon from 'antd/lib/icon';
+import Input from 'antd/lib/input';
+import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
 import {
   signUpOnChangeEmail as onChangeEmail,

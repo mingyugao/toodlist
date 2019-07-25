@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Dropdown from 'antd/lib/dropdown';
-import Menu from 'antd/lib/menu';
 import Avatar from 'antd/lib/avatar';
+import Dropdown from 'antd/lib/dropdown';
+import Icon from 'antd/lib/icon';
+import Menu from 'antd/lib/menu';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Column from '../components/Column';
 import {
   homeSignOut,
   homeDragAndDropRequest,
   homeDragAndDropSuccess,
-  homeDragAndDropFailure
+  homeDragAndDropFailure,
+  homeCreateTodolist
 } from '../actions/Home';
 
 class Home extends Component {
@@ -23,7 +25,8 @@ class Home extends Component {
       columns,
       columnOrder,
       signOut,
-      onDragEnd
+      onDragEnd,
+      createTodolist
     } = this.props;
 
     return (
@@ -49,9 +52,15 @@ class Home extends Component {
           >
             {columnOrder.map(cid => {
               const column = columns[cid];
-              const theseTodos = column.taskIds.map(tid => todos[tid]);
+              const theseTodos = column.todoIds.map(tid => todos[tid]);
               return <Column key={cid} column={column} todos={theseTodos} />
             })}
+            <div
+              className="column column-add-placeholder"
+              onClick={() => createTodolist()}
+            >
+              <Icon type="plus" />&nbsp;new todolist
+            </div>
           </DragDropContext>
         </div>
       </div>
@@ -77,6 +86,9 @@ const mapDispatchToProps = dispatch => {
     },
     onDragEnd: result => {
       dispatch(homeDragAndDropRequest(result));
+    },
+    createTodolist: () => {
+      dispatch(homeCreateTodolist());
     }
   };
 };

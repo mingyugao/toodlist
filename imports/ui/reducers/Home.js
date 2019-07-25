@@ -1,23 +1,28 @@
 const homeReducer = (
   state = {
-    todos: {
-      todo1: { id: 'todo1', content: 'Take out the garbage' },
-      todo2: { id: 'todo2', content: 'Pet the himbs' },
-      todo3: { id: 'todo3', content: 'Eat dinner' },
-      todo4: { id: 'todo4', content: 'patto the catto then hamb post and something else' }
-    },
-    columns: {
-      column1: {
-        id: 'column1',
-        title: 'my todos for today',
-        taskIds: ['todo1', 'todo2', 'todo3', 'todo4']
-      }
-    },
-    columnOrder: ['column1']
+    todos: {},
+    columns: {},
+    columnOrder: []
   },
   action
 ) => {
-  if (action.type === 'COLUMN_UPDATE_TITLE_REQUEST') {
+  if (action.type === 'HOME_CREATE_TODOLIST') {
+    const newColumnId = Date.now();
+    const newColumn = {
+      id: newColumnId,
+      title: 'new todolist',
+      todoIds: []
+    };
+
+    return {
+      ...state,
+      columns: {
+        ...state.columns,
+        [newColumnId]: newColumn
+      },
+      columnOrder: [ ...state.columnOrder, newColumnId ]
+    };
+  } else if (action.type === 'COLUMN_UPDATE_TITLE_REQUEST') {
     const { cid, title } = action.payload;
     return {
       ...state,
@@ -26,6 +31,28 @@ const homeReducer = (
         [cid]: { ...state.columns[cid], title }
       }
     };
+  } else if (action.type === 'COLUMN_DELETE_TODOLIST_REQUEST') {
+    const cid = action.payload;
+
+    const todoIdsToDelete = [ ...state.columns[cid].todoIds ];
+    const newTodos = { ...state.todos };
+    Object.keys(newTodos).forEach(tid => {
+      if (todoIdsToDelete.map(tid => tid.toString()).includes(tid)) {
+        delete newTodos[tid];
+      }
+    });
+
+    const newColumns = { ...state.columns };
+    delete newColumns[cid];
+
+    const newColumnOrder = state.columnOrder.filter(c => c !== cid);
+
+    return {
+      ...state,
+      todos: newTodos,
+      columns: newColumns,
+      columnOrder: newColumnOrder
+    }
   } else if (action.type === 'HOME_DRAG_AND_DROP_REQUEST') {
     const {
       reason,
@@ -41,10 +68,10 @@ const homeReducer = (
     ) return state;
 
     const column = state.columns[source.droppableId];
-    const newTaskIds = [ ...column.taskIds ];
+    const newTaskIds = [ ...column.todoIds ];
     newTaskIds.splice(source.index, 1);
     newTaskIds.splice(destination.index, 0, draggableId);
-    const newColumn = { ...column, taskIds: newTaskIds };
+    const newColumn = { ...column, todoIds: newTaskIds };
 
     return {
       ...state,
@@ -66,7 +93,7 @@ const homeReducer = (
     };
 
     const newColumns = { ...state.columns };
-    newColumns[cid].taskIds.push(newTodoId);
+    newColumns[cid].todoIds.push(newTodoId);
 
     return {
       ...state,
@@ -77,14 +104,14 @@ const homeReducer = (
     return {
       ...state,
     };
-  } else if (action.type === 'TODO_REMOVE_REQUEST') {
+  } else if (action.type === 'TODO_DELETE_REQUEST') {
     const newTodos = { ...state.todos };
     delete newTodos[action.payload.id]
     const newColumns = { ...state.columns };
 
     Object.keys(newColumns).forEach(cid => {
-      newColumns[cid].taskIds = newColumns[cid]
-        .taskIds
+      newColumns[cid].todoIds = newColumns[cid]
+        .todoIds
         .filter(tid => {
           return tid !== action.payload.id;
         });

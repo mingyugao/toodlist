@@ -111,21 +111,42 @@ body {
   height: 100vh;
 
   & > div:nth-of-type(1) {
-    height: 100%;
+    border-left: 1px solid @border-color;
+    background-color: white;
     padding: 1rem 1rem;
+    height: 100%;
 
     & > span { cursor: pointer; }
   }
 
   & > div:nth-of-type(2) {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+    overflow: auto;
+
     & > div.column {
       background-color: white;
       border: 1px solid @border-color;
       border-radius: 5px;
-      margin-top: 1rem;
-      margin-left: 1rem;
+      margin-right: 1rem;
       padding: 0.5rem;
-      width: 22rem;
+      min-width: 22rem;
+      max-width: 22rem;
+      height: fit-content;
+
+      &.column-add-placeholder {
+        border-style: dashed;
+        cursor: pointer;
+        text-align: center;
+        opacity: 0.8;
+
+        &:hover {
+          border-color: grey;
+          color: grey;
+          opacity: 1;
+        }
+      }
 
       & > div:nth-of-type(1) {
         display: flex;
@@ -136,7 +157,7 @@ body {
           border-radius: 5px;
           margin: 0;
           padding: 1px 0.5rem;
-          width: 100%;
+          width: 88%;
 
           &:hover {
             border-color: @border-color;
@@ -149,7 +170,18 @@ body {
           font-size: 20px;
           font-weight: 600;
           padding: 0 0.5rem;
-          width: 100%;
+          width: 88%;
+        }
+
+        & > button {
+          background-color: white;
+          margin-top: 0.2rem;
+          margin-right: 0.2rem;
+
+          &:hover {
+            background-color: red;
+            color: white;
+          }
         }
       }
 
@@ -171,6 +203,11 @@ body {
             color: darkgrey;
             cursor: pointer;
 
+            &:hover {
+              border-color: grey;
+              color: grey;
+            }
+
             & > i { margin-top: 4px; }
           }
 
@@ -179,17 +216,26 @@ body {
           }
 
           & > span:nth-of-type(2) {
+            color: darkgrey;
             min-width: 51px;
 
-            & > a {
-              color: darkgrey;
-
-              &:nth-of-type(1):hover { color: @link-color; }
-              &:nth-of-type(2):hover { color: red; }
-            }
+            & > a { color: inherit; }
+            & > a:nth-of-type(1):hover { color: @link-color; }
+            & > a:nth-of-type(2):hover { color: red; }
           }
         }
       }
+    }
+  }
+}
+
+div.ant-popover-buttons {
+  & > button:nth-of-type(2) {
+    background-color: white;
+
+    &:hover {
+      background-color: red;
+      color: white;
     }
   }
 }

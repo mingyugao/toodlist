@@ -17,21 +17,21 @@ export const todoEditFailure = () => {
   };
 };
 
-export const todoRemoveRequest = todo => {
+export const todoDeleteRequest = todo => {
   return {
-    type: 'TODO_REMOVE_REQUEST',
+    type: 'TODO_DELETE_REQUEST',
     payload: todo
   };
 };
 
-export const todoRemoveSuccess = () => {
+export const todoDeleteSuccess = () => {
   return {
-    type: 'TODO_REMOVE_SUCCESS'
+    type: 'TODO_DELETE_SUCCESS'
   };
 };
 
-export const todoRemoveFailure = () => {
+export const todoDeleteFailure = () => {
   return {
-    type: 'TODO_REMOVE_FAILURE'
+    type: 'TODO_DELETE_FAILURE'
   };
 };
