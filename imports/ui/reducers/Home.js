@@ -10,7 +10,7 @@ const homeReducer = (
     const newColumnId = Date.now();
     const newColumn = {
       id: newColumnId,
-      title: 'new todolist',
+      title: 'my todolist',
       todoIds: []
     };
 
@@ -101,8 +101,13 @@ const homeReducer = (
       columns: newColumns
     };
   } else if (action.type === 'TODO_EDIT_REQUEST') {
+    const { id } = action.payload;
     return {
       ...state,
+      todos: {
+        ...state.todos,
+        [id]: action.payload
+      }
     };
   } else if (action.type === 'TODO_DELETE_REQUEST') {
     const newTodos = { ...state.todos };
