@@ -22,7 +22,7 @@ const ForgotPassword = ({
   isSent,
   onChangeEmail,
   sendPasswordResetLink
-}) => !Meteor.userId ? (
+}) => !Meteor.userId() ? (
   <div id="forgot-password">
     <div>
       <Title>Reset Password</Title>
