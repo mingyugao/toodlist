@@ -22,6 +22,13 @@ import {
 
 const { Title } = Typography;
 
+const scrollToColumn = cid => {
+  document.getElementById(cid).scrollIntoView({
+    behavior: 'smooth',
+    inline: 'center'
+  });
+};
+
 class Column extends Component {
   state = {
     isTitleInputVisible: false,
@@ -94,9 +101,11 @@ class Column extends Component {
         {columnProvided => (
           <div
             className="column"
+            id={column.id}
             ref={columnProvided.innerRef}
             {...columnProvided.draggableProps}
             {...columnProvided.dragHandleProps}
+            onClick={() => scrollToColumn(column.id)}
           >
             <div>
               {!this.state.isTitleInputVisible && (
