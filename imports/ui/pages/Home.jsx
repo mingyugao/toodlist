@@ -4,18 +4,25 @@ import Avatar from 'antd/lib/avatar';
 import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
 import Menu from 'antd/lib/menu';
+import notification from 'antd/lib/notification';
 import { DragDropContext } from 'react-beautiful-dnd';
 import Column from '../components/Column';
 import {
   homeSignOut,
+  homeGetTodosRequest,
+  homeGetTodosSuccess,
+  homeGetTodosFailure,
   homeDragAndDropRequest,
   homeDragAndDropSuccess,
   homeDragAndDropFailure,
-  homeCreateTodolist
+  homeCreateTodolistRequest,
+  homeCreateTodolistSuccess,
+  homeCreateTodolistFailure
 } from '../actions/Home';
 
 class Home extends Component {
   componentDidMount() {
+    this.props.getTodos();
   }
 
   render() {
@@ -78,6 +85,16 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTodos: () => {
+      dispatch(homeGetTodosRequest());
+      Meteor.call('getData', Meteor.userId(), (err, response) => {
+        if (err) {
+          dispatch(homeGetTodosFailure());
+        } else {
+          dispatch(homeGetTodosSuccess(response));
+        }
+      });
+    },
     signOut: history => {
       Meteor.logout(err => {
         dispatch(homeSignOut());
@@ -85,10 +102,50 @@ const mapDispatchToProps = dispatch => {
       });
     },
     onDragEnd: result => {
-      dispatch(homeDragAndDropRequest(result));
+      const { reason, destination } = result;
+      if (reason !== 'CANCEL' && destination) {
+        dispatch(homeDragAndDropRequest(result));
+        Meteor.call(
+          'dragAndDrop',
+          Meteor.userId(),
+          result,
+          (err, response) => {
+            if (err) {
+              dispatch(homeDragAndDropFailure());
+              notification.error({
+                message: 'Your request failed to complete.',
+                description: 'Please refresh the page and try again.'
+              });
+            } else {
+              dispatch(homeDragAndDropSuccess());
+            }
+          }
+        );
+      }
     },
     createTodolist: () => {
-      dispatch(homeCreateTodolist());
+      const newColumn = {
+        id: Date.now(),
+        title: 'my todolist',
+        todoIds: []
+      };
+      dispatch(homeCreateTodolistRequest(newColumn));
+      Meteor.call(
+        'createTodolist',
+        Meteor.userId(),
+        newColumn,
+        (err, response) => {
+          if (err) {
+            dispatch(homeCreateTodolistFailure());
+            notification.error({
+              message: 'Your request failed to complete.',
+              description: 'Please refresh the page and try again.'
+            });
+          } else {
+            dispatch(homeCreateTodolistSuccess());
+          }
+        }
+      );
     }
   };
 };

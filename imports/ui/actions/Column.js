@@ -36,10 +36,10 @@ export const columnDeleteTodolistFailure = () => {
   };
 };
 
-export const columnCreateTodoRequest = (cid, todoContent) => {
+export const columnCreateTodoRequest = (cid, newTodo) => {
   return {
     type: 'COLUMN_CREATE_TODO_REQUEST',
-    payload: { cid, todoContent }
+    payload: { cid, newTodo }
   }
 };
 

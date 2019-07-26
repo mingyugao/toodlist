@@ -1,7 +1,7 @@
-export const todoEditRequest = todo => {
+export const todoEditRequest = newTodo => {
   return {
     type: 'TODO_EDIT_REQUEST',
-    payload: todo
+    payload: newTodo
   };
 };
 
@@ -17,10 +17,10 @@ export const todoEditFailure = () => {
   };
 };
 
-export const todoDeleteRequest = todo => {
+export const todoDeleteRequest = tid => {
   return {
     type: 'TODO_DELETE_REQUEST',
-    payload: todo
+    payload: tid
   };
 };
 

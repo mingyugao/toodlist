@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
+import notification from 'antd/lib/notification';
 import { Draggable } from 'react-beautiful-dnd';
 import {
   todoEditRequest,
@@ -69,7 +70,7 @@ class Todo extends Component {
             <span>
               <a onClick={this.toggleEditTodo}>edit</a>
               {' | '}
-              <a onClick={() => deleteTodo(todo)}><Icon type="delete" /></a>
+              <a onClick={() => deleteTodo(todo.id)}><Icon type="delete" /></a>
             </span>
           </div>
         )}
@@ -84,11 +85,45 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    editTodo: todo => {
-      dispatch(todoEditRequest(todo));
+    editTodo: newTodo => {
+      if (newTodo.content) {
+        dispatch(todoEditRequest(newTodo));
+        Meteor.call(
+          'editTodo',
+          Meteor.userId(),
+          newTodo,
+          (err, response) => {
+            if (err) {
+              dispatch(todoEditFailure());
+              notification.error({
+                message: 'Your request failed to complete.',
+                description: 'Please refresh the page and try again.'
+              });
+            } else {
+              dispatch(todoEditSuccess());
+            }
+          }
+        );
+      }
     },
-    deleteTodo: todo => {
-      dispatch(todoDeleteRequest(todo));
+    deleteTodo: tid => {
+      dispatch(todoDeleteRequest(tid));
+      Meteor.call(
+        'deleteTodo',
+        Meteor.userId(),
+        tid,
+        (err, response) => {
+          if (err) {
+            dispatch(todoDeleteFailure());
+            notification.error({
+              message: 'Your request failed to complete.',
+              description: 'Please refresh the page and try again.'
+            });
+          } else {
+            dispatch(todoDeleteSuccess());
+          }
+        }
+      );
     }
   };
 };

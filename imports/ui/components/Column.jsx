@@ -5,6 +5,7 @@ import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
+import notification from 'antd/lib/notification';
 import { Droppable } from 'react-beautiful-dnd';
 import Todo from './Todo';
 import {
@@ -161,14 +162,68 @@ const mapDispatchToProps = dispatch => {
     updateTitle: (cid, title) => {
       if (title) {
         dispatch(columnUpdateTitleRequest(cid, title));
+        Meteor.call(
+          'updateTitle',
+          Meteor.userId(),
+          cid,
+          title,
+          (err, response) => {
+            if (err) {
+              dispatch(columnUpdateTitleFailure());
+              notification.error({
+                message: 'Your request failed to complete.',
+                description: 'Please refresh the page and try again.'
+              });
+            } else {
+              dispatch(columnUpdateTitleSuccess());
+            }
+          }
+        );
       }
     },
     deleteTodolist: cid => {
       dispatch(columnDeleteTodolistRequest(cid));
+      Meteor.call(
+        'deleteTodolist',
+        Meteor.userId(),
+        cid,
+        (err, response) => {
+          if (err) {
+            dispatch(columnDeleteTodolistFailure());
+            notification.error({
+              message: 'Your request failed to complete.',
+              description: 'Please refresh the page and try again.'
+            });
+          } else {
+            dispatch(columnDeleteTodolistSuccess());
+          }
+        }
+      );
     },
     createTodo: (cid, todoContent) => {
       if (todoContent) {
-        dispatch(columnCreateTodoRequest(cid, todoContent));
+        const newTodo = {
+          id: Date.now(),
+          content: todoContent
+        };
+        dispatch(columnCreateTodoRequest(cid, newTodo));
+        Meteor.call(
+          'createTodo',
+          Meteor.userId(),
+          cid,
+          newTodo,
+          (err, response) => {
+            if (err) {
+              dispatch(columnCreateTodoFailure());
+              notification.error({
+                message: 'Your request failed to complete.',
+                description: 'Please refresh the page and try again.'
+              });
+            } else {
+              dispatch(columnCreateTodoSuccess());
+            }
+          }
+        );
       }
     }
   };
