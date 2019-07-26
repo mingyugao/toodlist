@@ -66,7 +66,7 @@ class Home extends Component {
               className="column column-add-placeholder"
               onClick={() => createTodolist()}
             >
-              <Icon type="plus" />&nbsp;new todolist
+              <Icon type="plus" />&nbsp;new toodlist
             </div>
           </DragDropContext>
         </div>
@@ -126,7 +126,7 @@ const mapDispatchToProps = dispatch => {
     createTodolist: () => {
       const newColumn = {
         id: Date.now(),
-        title: 'my todolist',
+        title: 'my toodlist',
         todoIds: []
       };
       dispatch(homeCreateTodolistRequest(newColumn));

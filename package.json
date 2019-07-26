@@ -1,5 +1,5 @@
 {
-  "name": "todolist",
+  "name": "toodlist",
   "private": true,
   "scripts": {
     "start": "meteor run",
