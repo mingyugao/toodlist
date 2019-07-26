@@ -34,12 +34,14 @@ const SignIn = ({
           prefix={<Icon type="mail" />}
           value={email}
           onChange={e => onChangeEmail(e.target.value)}
+          onPressEnter={() => signIn(email, password, history)}
         />
         <Input.Password
           placeholder="Password"
           prefix={<Icon type="lock" />}
           value={password}
           onChange={e => onChangePassword(e.target.value)}
+          onPressEnter={() => signIn(email, password, history)}
         />
         <Link to="/forgot_password">
           Forgot password?

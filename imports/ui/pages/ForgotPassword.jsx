@@ -33,6 +33,7 @@ const ForgotPassword = ({
             prefix={<Icon type="mail" />}
             placeholder="Email"
             onChange={e => onChangeEmail(e.target.value)}
+            onPressEnter={() => sendPasswordResetLink(email)}
           />
           <Button
             loading={isLoading}

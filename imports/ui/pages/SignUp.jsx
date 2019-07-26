@@ -34,12 +34,14 @@ const SignUp = ({
           prefix={<Icon type="mail" />}
           value={email}
           onChange={e => onChangeEmail(e.target.value)}
+          onPressEnter={() => signUp(email, password, history)}
         />
         <Input.Password
           placeholder="Password"
           prefix={<Icon type="lock" />}
           value={password}
           onChange={e => onChangePassword(e.target.value)}
+          onPressEnter={() => signUp(email, password, history)}
         />
         <Button
           loading={isLoading}

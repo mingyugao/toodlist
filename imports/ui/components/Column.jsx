@@ -102,7 +102,7 @@ class Column extends Component {
           )}
           <Popconfirm
             okType="danger"
-            title="Delete todolist?"
+            title="Delete toodlist?"
             icon={<Icon type="warning" />}
             onConfirm={() => deleteTodolist(column.id)}
           >
