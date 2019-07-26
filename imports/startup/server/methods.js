@@ -128,35 +128,50 @@ Meteor.methods({
     const {
       draggableId,
       source,
-      destination
+      destination,
+      type
     } = result;
 
-    const sourceColumn = user.columns[source.droppableId];
-    const newSourceTodoIds = [ ...sourceColumn.todoIds ];
-    newSourceTodoIds.splice(source.index, 1);
-    const newSourceColumn = { ...sourceColumn, todoIds: newSourceTodoIds };
+    if (type === 'column') {
+      const newColumnOrder = [ ...user.columnOrder ];
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
 
-    const destinationColumn = user.columns[destination.droppableId];
-    const newDestinationTodoIds = source.droppableId === destination.droppableId
-      ? newSourceTodoIds
-      : [ ...destinationColumn.todoIds ];
-    newDestinationTodoIds.splice(destination.index, 0, draggableId);
-    const newDestinationColumn = {
-      ...destinationColumn,
-      todoIds: newDestinationTodoIds
-    };
-
-    Meteor.users.update(userId, {
-      $set: {
-        columns: {
-          ...user.columns,
-          [newSourceColumn.id]: newSourceColumn,
-          [newDestinationColumn.id]: newDestinationColumn
+      Meteor.users.update(userId, {
+        $set: {
+          columnOrder: newColumnOrder
         }
-      }
-    }, err => {
-      if (err) return err;
-    });
+      }, err => {
+        if (err) return err;
+      });
+    } else {
+      const sourceColumn = user.columns[source.droppableId];
+      const newSourceTodoIds = [ ...sourceColumn.todoIds ];
+      newSourceTodoIds.splice(source.index, 1);
+      const newSourceColumn = { ...sourceColumn, todoIds: newSourceTodoIds };
+
+      const destinationColumn = user.columns[destination.droppableId];
+      const newDestinationTodoIds = source.droppableId === destination.droppableId
+        ? newSourceTodoIds
+        : [ ...destinationColumn.todoIds ];
+      newDestinationTodoIds.splice(destination.index, 0, draggableId);
+      const newDestinationColumn = {
+        ...destinationColumn,
+        todoIds: newDestinationTodoIds
+      };
+
+      Meteor.users.update(userId, {
+        $set: {
+          columns: {
+            ...user.columns,
+            [newSourceColumn.id]: newSourceColumn,
+            [newDestinationColumn.id]: newDestinationColumn
+          }
+        }
+      }, err => {
+        if (err) return err;
+      });
+    }
   },
   sendPasswordResetLink: email => {
     const user = Accounts.findUserByEmail(email);

@@ -49,12 +49,12 @@ class Todo extends Component {
         draggableId={todo.id}
         index={index}
       >
-        {provided => (
+        {todoProvided => (
           <div
             className="todo"
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
+            ref={todoProvided.innerRef}
+            {...todoProvided.draggableProps}
+            {...todoProvided.dragHandleProps}
           >
             {!this.state.isBeingEdited && (
               <span>{todo.content}</span>

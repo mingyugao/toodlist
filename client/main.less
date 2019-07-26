@@ -125,119 +125,135 @@ body {
     padding: 1rem;
     overflow: auto;
 
-    & > div.column {
+    & > div {
+      display: flex;
+      flex-direction: row;
+
+      & > div.column {
+        background-color: white;
+        border: 1px solid @border-color;
+        border-radius: 5px;
+        margin-right: 1rem;
+        padding: 0.5rem;
+        min-width: 22rem;
+        max-width: 22rem;
+        height: fit-content;
+
+        & > div:nth-of-type(1) {
+          display: flex;
+          justify-content: space-between;
+
+          & > h4 {
+            border: 1px solid transparent;
+            border-radius: 5px;
+            margin: 0;
+            padding: 1px 0.5rem;
+            width: 88%;
+
+            &:hover {
+              border-color: @border-color;
+              cursor: default;
+            }
+          }
+
+          & > input {
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 0 0.5rem;
+            width: 88%;
+          }
+
+          & > button {
+            background-color: white;
+            border-color: @border-color;
+            color: red;
+            margin-top: 0.2rem;
+            margin-right: 0.2rem;
+
+            &:hover {
+              background-color: red;
+              color: white;
+            }
+          }
+        }
+
+        & > div:nth-of-type(2) {
+          min-height: 12rem;
+
+          & > .todo {
+            display: flex;
+            justify-content: space-between;
+            background-color: white;
+            border: 1px solid @border-color;
+            border-radius: 5px;
+            margin-top: 0.3rem;
+            padding: 0.5rem;
+
+            &.todo-add-placeholder {
+              justify-content: center;
+              border-style: dashed;
+              color: darkgrey;
+              cursor: pointer;
+
+              &:hover {
+                border-color: grey;
+                color: grey;
+              }
+
+              & > i { margin-top: 4px; }
+            }
+
+            &.todo-add-input {
+              height: 39px;
+            }
+
+            & > input {
+              border: none;
+              line-height: 21px;
+              margin: 0;
+              padding: 0;
+              width: 80%;
+              height: 21px;
+            }
+
+            & > span:nth-of-type(1) { margin-right: 0.5rem; }
+            & > span:nth-of-type(2) {
+              color: darkgrey;
+              min-width: 51px;
+              max-width: 51px;
+
+              & > a { color: inherit; }
+              & > a:nth-of-type(1):hover { color: @link-color; }
+              & > a:nth-of-type(2):hover { color: red; }
+            }
+          }
+        }
+      }
+    }
+
+    & > div.column-add-placeholder {
+      display: flex;
+      justify-content: center;
       background-color: white;
       border: 1px solid @border-color;
+      border-style: dashed;
       border-radius: 5px;
+      cursor: pointer;
       margin-right: 1rem;
       padding: 0.5rem;
+      opacity: 0.8;
       min-width: 22rem;
       max-width: 22rem;
       height: fit-content;
 
-      &.column-add-placeholder {
-        border-style: dashed;
-        cursor: pointer;
-        text-align: center;
-        opacity: 0.8;
-
-        &:hover {
-          border-color: grey;
-          color: grey;
-          opacity: 1;
-        }
+      &:hover {
+        border-color: grey;
+        color: grey;
+        opacity: 1;
       }
 
-      & > div:nth-of-type(1) {
-        display: flex;
-        justify-content: space-between;
-
-        & > h4 {
-          border: 1px solid transparent;
-          border-radius: 5px;
-          margin: 0;
-          padding: 1px 0.5rem;
-          width: 88%;
-
-          &:hover {
-            border-color: @border-color;
-            cursor: default;
-          }
-        }
-
-        & > input {
-          border-radius: 5px;
-          font-size: 20px;
-          font-weight: 600;
-          padding: 0 0.5rem;
-          width: 88%;
-        }
-
-        & > button {
-          background-color: white;
-          border-color: @border-color;
-          color: red;
-          margin-top: 0.2rem;
-          margin-right: 0.2rem;
-
-          &:hover {
-            background-color: red;
-            color: white;
-          }
-        }
-      }
-
-      & > div:nth-of-type(2) {
-        min-height: 12rem;
-
-        & > .todo {
-          display: flex;
-          justify-content: space-between;
-          background-color: white;
-          border: 1px solid @border-color;
-          border-radius: 5px;
-          margin-top: 0.3rem;
-          padding: 0.5rem;
-
-          &.todo-add-placeholder {
-            justify-content: center;
-            border-style: dashed;
-            color: darkgrey;
-            cursor: pointer;
-
-            &:hover {
-              border-color: grey;
-              color: grey;
-            }
-
-            & > i { margin-top: 4px; }
-          }
-
-          &.todo-add-input {
-            height: 39px;
-          }
-
-          & > input {
-            border: none;
-            line-height: 21px;
-            margin: 0;
-            padding: 0;
-            width: 80%;
-            height: 21px;
-          }
-
-          & > span:nth-of-type(1) { margin-right: 0.5rem; }
-          & > span:nth-of-type(2) {
-            color: darkgrey;
-            min-width: 51px;
-            max-width: 51px;
-
-            & > a { color: inherit; }
-            & > a:nth-of-type(1):hover { color: @link-color; }
-            & > a:nth-of-type(2):hover { color: red; }
-          }
-        }
-      }
+      & > i { margin-top: 4px; }
     }
   }
 }

@@ -55,8 +55,20 @@ const homeReducer = (
     const {
       draggableId,
       source,
-      destination
+      destination,
+      type
     } = action.payload;
+
+    if (type === 'column') {
+      const newColumnOrder = [ ...state.columnOrder ];
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
+
+      return {
+        ...state,
+        columnOrder: newColumnOrder
+      };
+    }
 
     const sourceColumn = state.columns[source.droppableId];
     const newSourceTodoIds = [ ...sourceColumn.todoIds ];

@@ -6,7 +6,7 @@ import Input from 'antd/lib/input';
 import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Todo from './Todo';
 import {
   columnUpdateTitleRequest,
@@ -79,76 +79,93 @@ class Column extends Component {
   };
 
   render() {
-    const { column, todos, deleteTodolist } = this.props;
+    const {
+      index,
+      column,
+      todos,
+      deleteTodolist
+    } = this.props;
 
     return (
-      <div className="column">
-        <div>
-          {!this.state.isTitleInputVisible && (
-            <Title
-              level={4}
-              onClick={this.toggleEditTitle}
-            >
-              {column.title}
-            </Title>
-          )}
-          {this.state.isTitleInputVisible && (
-            <Input
-              ref={this.saveTitleRef}
-              defaultValue={column.title}
-              onBlur={this.updateTitle}
-              onPressEnter={this.updateTitle}
-            />
-          )}
-          <Popconfirm
-            okType="danger"
-            title="Delete toodlist?"
-            icon={<Icon type="warning" />}
-            onConfirm={() => deleteTodolist(column.id)}
+      <Draggable
+        draggableId={column.id}
+        index={index}
+      >
+        {columnProvided => (
+          <div
+            className="column"
+            ref={columnProvided.innerRef}
+            {...columnProvided.draggableProps}
+            {...columnProvided.dragHandleProps}
           >
-            <Button
-              icon="close"
-              shape="circle"
-              size="small"
-              type="danger"
-            />
-          </Popconfirm>
-        </div>
-        <Droppable droppableId={column.id}>
-          {provided => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {todos.map((todo, index) => (
-                <Todo
-                  key={todo.id}
-                  index={index}
-                  todo={todo}
-                />
-              ))}
-              {provided.placeholder}
-              {!this.state.isTodoInputVisible && (
-                <div
-                  className="todo todo-add-placeholder"
-                  onClick={this.toggleNewTodo}
+            <div>
+              {!this.state.isTitleInputVisible && (
+                <Title
+                  level={4}
+                  onClick={this.toggleEditTitle}
                 >
-                  <Icon type="plus" />&nbsp;new item
+                  {column.title}
+                </Title>
+              )}
+              {this.state.isTitleInputVisible && (
+                <Input
+                  ref={this.saveTitleRef}
+                  defaultValue={column.title}
+                  onBlur={this.updateTitle}
+                  onPressEnter={this.updateTitle}
+                />
+              )}
+              <Popconfirm
+                okType="danger"
+                title="Delete toodlist?"
+                icon={<Icon type="warning" />}
+                onConfirm={() => deleteTodolist(column.id)}
+              >
+                <Button
+                  icon="close"
+                  shape="circle"
+                  size="small"
+                  type="danger"
+                />
+              </Popconfirm>
+            </div>
+            <Droppable droppableId={column.id} type="todo">
+              {innerProvided => (
+                <div
+                  ref={innerProvided.innerRef}
+                  {...innerProvided.droppableProps}
+                >
+                  {todos.map((todo, index) => (
+                    <Todo
+                      key={todo.id}
+                      index={index}
+                      todo={todo}
+                    />
+                  ))}
+                  {innerProvided.placeholder}
+                  {!this.state.isTodoInputVisible && (
+                    <div
+                      className="todo todo-add-placeholder"
+                      onClick={this.toggleNewTodo}
+                    >
+                      <Icon type="plus" />&nbsp;new item
+                    </div>
+                  )}
+                  {this.state.isTodoInputVisible && (
+                    <Input
+                      className="todo todo-add-input"
+                      ref={this.saveTodoRef}
+                      defaultValue=""
+                      onBlur={this.createTodo}
+                      onPressEnter={this.createTodoAndFocusInput}
+                    />
+                  )}
                 </div>
               )}
-              {this.state.isTodoInputVisible && (
-                <Input
-                  className="todo todo-add-input"
-                  ref={this.saveTodoRef}
-                  defaultValue=""
-                  onBlur={this.createTodo}
-                  onPressEnter={this.createTodoAndFocusInput}
-                />
-              )}
-            </div>
-          )}
-        </Droppable>
-      </div>
+            </Droppable>
+          </div>
+        )}
+      </Draggable>
     );
   }
 }

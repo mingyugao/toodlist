@@ -5,7 +5,7 @@ import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
 import Menu from 'antd/lib/menu';
 import notification from 'antd/lib/notification';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Column from '../components/Column';
 import {
   homeSignOut,
@@ -57,13 +57,34 @@ class Home extends Component {
           <DragDropContext
             onDragEnd={result => onDragEnd(result)}
           >
-            {columnOrder.map(cid => {
-              const column = columns[cid];
-              const theseTodos = column.todoIds.map(tid => todos[tid]);
-              return <Column key={cid} column={column} todos={theseTodos} />
-            })}
+            <Droppable
+              droppableId="main-droppable-container"
+              direction="horizontal"
+              type="column"
+            >
+              {mainProvided => (
+                <div
+                  ref={mainProvided.innerRef}
+                  {...mainProvided.droppableProps}
+                >
+                  {columnOrder.map((cid, index) => {
+                    const column = columns[cid];
+                    const theseTodos = column.todoIds.map(tid => todos[tid]);
+                    return (
+                      <Column
+                        key={cid}
+                        index={index}
+                        column={column}
+                        todos={theseTodos}
+                      />
+                    );
+                  })}
+                  {mainProvided.placeholder}
+                </div>
+              )}
+            </Droppable>
             <div
-              className="column column-add-placeholder"
+              className="column-add-placeholder"
               onClick={() => createTodolist()}
             >
               <Icon type="plus" />&nbsp;new toodlist
