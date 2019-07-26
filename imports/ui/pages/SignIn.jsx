@@ -27,7 +27,7 @@ const SignIn = ({
 }) => !Meteor.userId() ? (
   <div id="sign-in">
     <div>
-      <Title>todolist</Title>
+      <Title>toodlist</Title>
       <div>
         <Input
           placeholder="Email"
