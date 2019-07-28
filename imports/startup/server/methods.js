@@ -1,5 +1,5 @@
 Meteor.methods({
-  getData: userId => {
+  getUserData: userId => {
     const user = Meteor.users.findOne(userId);
     if (user.todos === undefined) {
       Meteor.users.update(userId, {
@@ -7,6 +7,7 @@ Meteor.methods({
       });
     }
     return {
+      ...user,
       todos: user.todos || {},
       columns: user.columns || {},
       columnOrder: user.columnOrder

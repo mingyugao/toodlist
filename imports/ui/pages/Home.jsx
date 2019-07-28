@@ -9,9 +9,9 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Column from '../components/Column';
 import {
   homeSignOut,
-  homeGetTodosRequest,
-  homeGetTodosSuccess,
-  homeGetTodosFailure,
+  homeGetUserDataRequest,
+  homeGetUserDataSuccess,
+  homeGetUserDataFailure,
   homeDragAndDropRequest,
   homeDragAndDropSuccess,
   homeDragAndDropFailure,
@@ -22,31 +22,55 @@ import {
 
 class Home extends Component {
   componentDidMount() {
-    this.props.getTodos();
+    this.props.getUserData();
   }
 
   render() {
     const {
       history,
+      email,
       todos,
       columns,
       columnOrder,
+      openSettings,
       signOut,
       onDragEnd,
       createTodolist
     } = this.props;
 
+    const avatarMenu = (
+      <Menu>
+        <Menu.Item disabled>
+          {email}
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item onClick={() => openSettings(history)}>
+          Settings
+        </Menu.Item>
+        <Menu.Item onClick={() => signOut(history)}>
+          Log out
+        </Menu.Item>
+      </Menu>
+    );
+
+    const renderedColumns = columnOrder.map((cid, index) => {
+      const column = columns[cid];
+      const theseTodos = column.todoIds.map(tid => todos[tid]);
+      return (
+        <Column
+          key={cid}
+          index={index}
+          column={column}
+          todos={theseTodos}
+        />
+      );
+    });
+
     return (
       <div id="home">
         <div>
           <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item onClick={() => signOut(history)}>
-                  Log out
-                </Menu.Item>
-              </Menu>
-            }
+            overlay={avatarMenu}
             overlayClassName="home-avatar-dropdown"
             trigger={['click']}
           >
@@ -67,18 +91,7 @@ class Home extends Component {
                   ref={mainProvided.innerRef}
                   {...mainProvided.droppableProps}
                 >
-                  {columnOrder.map((cid, index) => {
-                    const column = columns[cid];
-                    const theseTodos = column.todoIds.map(tid => todos[tid]);
-                    return (
-                      <Column
-                        key={cid}
-                        index={index}
-                        column={column}
-                        todos={theseTodos}
-                      />
-                    );
-                  })}
+                  {renderedColumns}
                   {mainProvided.placeholder}
                 </div>
               )}
@@ -98,6 +111,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
+    email: state.home.email,
     todos: state.home.todos,
     columns: state.home.columns,
     columnOrder: state.home.columnOrder
@@ -106,15 +120,30 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTodos: () => {
-      dispatch(homeGetTodosRequest());
-      Meteor.call('getData', Meteor.userId(), (err, response) => {
-        if (err) {
-          dispatch(homeGetTodosFailure());
-        } else {
-          dispatch(homeGetTodosSuccess(response));
+    getUserData: () => {
+      dispatch(homeGetUserDataRequest());
+      Meteor.call(
+        'getUserData',
+        Meteor.userId(),
+        (err, response) => {
+          if (err) {
+            dispatch(homeGetUserDataFailure());
+            notification.error({
+              message: 'Your request failed to complete.',
+              description: 'Please refresh the page and try again.'
+            });
+          } else {
+            dispatch(homeGetUserDataSuccess({
+              todos: response.todos,
+              columns: response.columns,
+              columnOrder: response.columnOrder,
+              email: response.emails[0].address
+            }));
+          }
         }
-      });
+      );
+    },
+    openSettings: history => {
     },
     signOut: history => {
       Meteor.logout(err => {

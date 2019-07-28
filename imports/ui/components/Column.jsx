@@ -35,15 +35,15 @@ class Column extends Component {
     isTodoInputVisible: false
   };
 
-  componentDidUpdate = (_, prevState) => {
+  componentDidUpdate = (_, prev) => {
     const {
       isTitleInputVisible,
       isTodoInputVisible
     } = this.state;
 
-    if (!prevState.isTitleInputVisible && isTitleInputVisible) {
+    if (!prev.isTitleInputVisible && isTitleInputVisible) {
       this.titleInput.focus();
-    } else if (!prevState.isTodoInputVisible && isTodoInputVisible) {
+    } else if (!prev.isTodoInputVisible && isTodoInputVisible) {
       this.todoInput.focus();
     }
   };

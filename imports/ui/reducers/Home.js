@@ -1,12 +1,13 @@
 const homeReducer = (
   state = {
+    email: '',
     todos: {},
     columns: {},
     columnOrder: []
   },
   action
 ) => {
-  if (action.type === 'HOME_GET_TODOS_SUCCESS') {
+  if (action.type === 'HOME_GET_USER_DATA_SUCCESS') {
     return {
       ...state,
       ...action.payload
