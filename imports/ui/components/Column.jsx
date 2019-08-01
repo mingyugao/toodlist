@@ -6,7 +6,10 @@ import Input from 'antd/lib/input';
 import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import {
+  Droppable,
+  Draggable
+} from 'react-beautiful-dnd';
 import Todo from './Todo';
 import {
   columnUpdateTitleRequest,
@@ -100,7 +103,7 @@ class Column extends Component {
       >
         {columnProvided => (
           <div
-            className="column"
+            className={`${column.color || 'white'} column`}
             id={column.id}
             ref={columnProvided.innerRef}
             {...columnProvided.draggableProps}

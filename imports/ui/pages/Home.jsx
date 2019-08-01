@@ -5,8 +5,12 @@ import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
 import Menu from 'antd/lib/menu';
 import notification from 'antd/lib/notification';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Droppable
+} from 'react-beautiful-dnd';
 import Column from '../components/Column';
+import Settings from '../components/Settings';
 import {
   homeSignOut,
   homeGetUserDataRequest,
@@ -19,6 +23,7 @@ import {
   homeCreateTodolistSuccess,
   homeCreateTodolistFailure
 } from '../actions/Home';
+import { openSettings } from '../actions/Settings';
 
 class Home extends Component {
   componentDidMount() {
@@ -32,6 +37,7 @@ class Home extends Component {
       todos,
       columns,
       columnOrder,
+      isSettingsOpen,
       openSettings,
       signOut,
       onDragEnd,
@@ -67,7 +73,10 @@ class Home extends Component {
     });
 
     return (
-      <div id="home">
+      <div
+        id="home"
+        style={isSettingsOpen ? { filter: 'blur(2px)' } : {}}
+      >
         <div>
           <Dropdown
             overlay={avatarMenu}
@@ -104,6 +113,7 @@ class Home extends Component {
             </div>
           </DragDropContext>
         </div>
+        <Settings />
       </div>
     );
   }
@@ -114,7 +124,8 @@ const mapStateToProps = state => {
     email: state.home.email,
     todos: state.home.todos,
     columns: state.home.columns,
-    columnOrder: state.home.columnOrder
+    columnOrder: state.home.columnOrder,
+    isSettingsOpen: state.settings.visible
   };
 };
 
@@ -143,7 +154,8 @@ const mapDispatchToProps = dispatch => {
         }
       );
     },
-    openSettings: history => {
+    openSettings: () => {
+      dispatch(openSettings());
     },
     signOut: history => {
       Meteor.logout(err => {
@@ -177,7 +189,8 @@ const mapDispatchToProps = dispatch => {
       const newColumn = {
         id: Date.now(),
         title: 'my toodlist',
-        todoIds: []
+        todoIds: [],
+        color: 'white'
       };
       dispatch(homeCreateTodolistRequest(newColumn));
       Meteor.call(

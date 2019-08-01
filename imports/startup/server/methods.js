@@ -40,6 +40,19 @@ Meteor.methods({
       if (err) return err;
     });
   },
+  updateColor: (userId, cid, color) => {
+    const user = Meteor.users.findOne(userId);
+    Meteor.users.update(userId, {
+      $set: {
+        columns: {
+          ...user.columns,
+          [cid]: { ...user.columns[cid], color }
+        }
+      }
+    }, err => {
+      if (err) return err;
+    });
+  },
   deleteTodolist: (userId, cid) => {
     const user = Meteor.users.findOne(userId);
 

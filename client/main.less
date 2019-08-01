@@ -128,13 +128,22 @@ body {
 
       & > div.column {
         background-color: white;
-        border: 1px solid @border-color;
+        border: 1px solid transparent;
         border-radius: 5px;
         margin-right: 1rem;
         padding: 0.5rem;
         min-width: 22rem;
         max-width: 22rem;
         height: fit-content;
+
+        &.white { background-color: @white; }
+        &.blue { background-color: @blue }
+        &.purple { background-color: @purple; }
+        &.pink { background-color: @pink; }
+        &.red { background-color: @red; }
+        &.orange { background-color: @orange; }
+        &.yellow { background-color: @yellow; }
+        &.green { background-color: @green; }
 
         & > div:nth-of-type(1) {
           display: flex;
@@ -148,12 +157,13 @@ body {
             width: 88%;
 
             &:hover {
-              border-color: @border-color;
+              border-color: @border-color-light;
               cursor: default;
             }
           }
 
           & > input {
+            border-color: @border-color-light;
             border-radius: 5px;
             font-size: 20px;
             font-weight: 600;
@@ -162,7 +172,7 @@ body {
           }
 
           & > button {
-            background-color: white;
+            background-color: transparent;
             border-color: @border-color;
             color: red;
             margin-top: 0.2rem;
@@ -182,20 +192,22 @@ body {
             display: flex;
             justify-content: space-between;
             background-color: white;
-            border: 1px solid @border-color;
+            border: 1px solid @border-color-light;
             border-radius: 5px;
             margin-top: 0.3rem;
             padding: 0.5rem;
 
             &.todo-add-placeholder {
               justify-content: center;
+              background-color: transparent;
+              border-color: @border-color;
               border-style: dashed;
-              color: darkgrey;
+              color: darkslategrey;
               cursor: pointer;
 
               &:hover {
-                border-color: grey;
-                color: grey;
+                border-color: black;
+                color: black;
               }
 
               & > i { margin-top: 4px; }
@@ -236,6 +248,7 @@ body {
       border: 1px solid @border-color;
       border-style: dashed;
       border-radius: 5px;
+      color: darkslategrey;
       cursor: pointer;
       margin-right: 1rem;
       padding: 0.5rem;
@@ -245,8 +258,8 @@ body {
       height: fit-content;
 
       &:hover {
-        border-color: grey;
-        color: grey;
+        border-color: black;
+        color: black;
         opacity: 1;
       }
 
@@ -259,6 +272,8 @@ div.home-avatar-dropdown {
   & > ul > li:first-child {
     color: rgba(0, 0, 0, 0.65);
     cursor: default;
+
+    &:hover { background-color: #e6f7ff; }
   }
 }
 
@@ -270,6 +285,139 @@ div.ant-popover-buttons {
     &:hover {
       background-color: red;
       color: white;
+    }
+  }
+}
+
+div.ant-modal {
+  height: 100%;
+  padding-top: 24px;
+
+  & div.ant-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    & div.ant-modal-header { padding-bottom: 0; }
+
+    & div.ant-modal-body {
+      flex-grow: 1;
+      overflow: scroll;
+      padding: 1rem 16% 3rem;
+
+      & > div:nth-of-type(1) > span { margin-right: 1rem; }
+
+      & > div:nth-of-type(3) {
+        & > span { color: darkgrey; }
+
+        & > div {
+          display: flex;
+          flex-wrap: wrap;
+          margin-bottom: 0.5rem;
+
+          & > span {
+            margin-right: 1rem;
+            min-width: 100px;
+            width: 30%;
+          }
+
+          & > div {
+            display: flex;
+            justify-content: space-between;
+            margin: auto 0;
+            min-width: 200px;
+            width: 45%;
+
+            & > label {
+              margin: 0;
+
+              & > span:nth-of-type(1):hover {
+                & span.ant-radio-inner {
+                  border-color: darkgrey;
+                }
+              }
+
+              & > span:nth-of-type(2) { padding: 0; }
+            }
+
+            & label.ant-radio-wrapper:nth-of-type(1) {
+              & span.ant-radio-inner {
+                background-color: @white;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(2) {
+              & span.ant-radio-inner {
+                background-color: @blue;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(3) {
+              & span.ant-radio-inner {
+                background-color: @purple;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(4) {
+              & span.ant-radio-inner {
+                background-color: @pink;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(5) {
+              & span.ant-radio-inner {
+                background-color: @red;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(6) {
+              & span.ant-radio-inner {
+                background-color: @orange;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(7) {
+              & span.ant-radio-inner {
+                background-color: @yellow;
+              }
+            }
+            & label.ant-radio-wrapper:nth-of-type(8) {
+              & span.ant-radio-inner {
+                background-color: @green;
+              }
+            }
+
+            & label.ant-radio-wrapper-checked {
+              & input.ant-radio.input:focus { outline: none; }
+              & span.ant-radio-inner {
+                border-color: grey;
+                &::after {
+                  background-color: grey;
+                  top: 4px;
+                  left: 4px;
+                  width: 6px;
+                  height: 6px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      & > div:nth-of-type(5) {
+        & > h4 { margin-bottom: 0; }
+
+        & > input {
+          margin-top: 0.5rem;
+          margin-right: 0.5rem;
+          max-width: 300px;
+        }
+
+        & > button { margin-top: 0.5rem; }
+      }
+
+      & > div:nth-of-type(7) {
+        & > span {
+          max-width: 300px;
+          margin-bottom: 0.3rem;
+        }
+
+        & > div:last-of-type { margin-top: 0.2rem; }
+      }
     }
   }
 }

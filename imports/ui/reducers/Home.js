@@ -138,6 +138,15 @@ const homeReducer = (
       todos: newTodos,
       columns: newColumns
     };
+  } else if (action.type === 'SETTINGS_CHANGE_COLUMN_COLOR_REQUEST') {
+    const { cid, color } = action.payload;
+    return {
+      ...state,
+      columns: {
+        ...state.columns,
+        [cid]: { ...state.columns[cid], color }
+      }
+    };
   }
   return state;
 };
