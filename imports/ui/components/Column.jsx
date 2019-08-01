@@ -138,6 +138,7 @@ class Column extends Component {
                   shape="circle"
                   size="small"
                   type="danger"
+                  onClick={e => e.stopPropagation()}
                 />
               </Popconfirm>
             </div>

@@ -15,7 +15,7 @@ body {
     transform: translate(-50%, -50%);
 
     background-color: white;
-    border: 1px solid @border-color-light;
+    border: 1px solid @border-color-xlight;
     border-radius: 5px;
     padding: 3rem;
     text-align: center;
@@ -46,7 +46,7 @@ body {
     transform: translate(-50%, -70%);
 
     background-color: white;
-    border: 1px solid @border-color-light;
+    border: 1px solid @border-color-xlight;
     border-radius: 5px;
     padding: 3rem;
     text-align: center;
@@ -81,7 +81,7 @@ body {
     transform: translate(-50%, -50%);
 
     background-color: white;
-    border: 1px solid @border-color-light;
+    border: 1px solid @border-color-xlight;
     border-radius: 5px;
     padding: 3rem;
     text-align: center;
@@ -128,22 +128,13 @@ body {
 
       & > div.column {
         background-color: white;
-        border: 1px solid transparent;
+        border: 1px solid @border-color-xlight;
         border-radius: 5px;
         margin-right: 1rem;
         padding: 0.5rem;
         min-width: 22rem;
         max-width: 22rem;
         height: fit-content;
-
-        &.white { background-color: @white; }
-        &.blue { background-color: @blue }
-        &.purple { background-color: @purple; }
-        &.pink { background-color: @pink; }
-        &.red { background-color: @red; }
-        &.orange { background-color: @orange; }
-        &.yellow { background-color: @yellow; }
-        &.green { background-color: @green; }
 
         & > div:nth-of-type(1) {
           display: flex;
@@ -157,13 +148,13 @@ body {
             width: 88%;
 
             &:hover {
-              border-color: @border-color-light;
+              border-color: @border-color;
               cursor: default;
             }
           }
 
           & > input {
-            border-color: @border-color-light;
+            border-color: @border-color;
             border-radius: 5px;
             font-size: 20px;
             font-weight: 600;
@@ -173,7 +164,7 @@ body {
 
           & > button {
             background-color: transparent;
-            border-color: @border-color;
+            border-color: @border-color-dark;
             color: red;
             margin-top: 0.2rem;
             margin-right: 0.2rem;
@@ -192,7 +183,7 @@ body {
             display: flex;
             justify-content: space-between;
             background-color: white;
-            border: 1px solid @border-color-light;
+            border: 1px solid @border-color;
             border-radius: 5px;
             margin-top: 0.3rem;
             padding: 0.5rem;
@@ -200,7 +191,7 @@ body {
             &.todo-add-placeholder {
               justify-content: center;
               background-color: transparent;
-              border-color: @border-color;
+              border-color: @border-color-dark;
               border-style: dashed;
               color: darkslategrey;
               cursor: pointer;
@@ -228,7 +219,7 @@ body {
 
             & > span:first-child { margin-right: 0.5rem; }
             & > span:last-of-type {
-              color: darkgrey;
+              color: grey;
               min-width: 51px;
               max-width: 51px;
 
@@ -238,6 +229,72 @@ body {
             }
           }
         }
+
+        &.white {
+          background-color: @white;
+          & > div > h4:hover { border-color: @border-color-light; }
+          & > div > input { border-color: @border-color-light; }
+          & > div > button { border-color: @border-color-light; }
+          & div.todo { border-color: @border-color-light; }
+          & div.todo.todo-add-placeholder {
+            border-color: darkgrey;
+            color: darkgrey;
+          }
+          & div.todo.todo-add-placeholder:hover {
+            border-color: @border-color;
+            color: lightslategrey;
+          }
+          & input.todo.todo-add-input { border-color: @border-color-light; }
+        }
+        &.blue {
+          background-color: @blue;
+          & input { background-color: @blue-todo; }
+          & div.todo { background-color: @blue-todo; }
+          & div.todo-add-placeholder:hover { background-color: @blue-todo; }
+          & input.todo { background-color: @blue-todo; }
+        }
+        &.purple {
+          background-color: @purple;
+          & input { background-color: @purple-todo; }
+          & div.todo { background-color: @purple-todo; }
+          & div.todo-add-placeholder:hover { background-color: @purple-todo; }
+          & input.todo { background-color: @purple-todo; }
+        }
+        &.pink {
+          background-color: @pink;
+          & input { background-color: @pink-todo; }
+          & div.todo { background-color: @pink-todo; }
+          & div.todo-add-placeholder:hover { background-color: @pink-todo; }
+          & input.todo { background-color: @pink-todo; }
+        }
+        &.red {
+          background-color: @red;
+          & input { background-color: @red-todo; }
+          & div.todo { background-color: @red-todo; }
+          & div.todo-add-placeholder:hover { background-color: @red-todo; }
+          & input.todo { background-color: @red-todo; }
+        }
+        &.orange {
+          background-color: @orange;
+          & input { background-color: @orange-todo; }
+          & div.todo { background-color: @orange-todo; }
+          & div.todo-add-placeholder:hover { background-color: @orange-todo; }
+          & input.todo { background-color: @orange-todo; }
+        }
+        &.yellow {
+          background-color: @yellow;
+          & input { background-color: @yellow-todo; }
+          & div.todo { background-color: @yellow-todo; }
+          & div.todo-add-placeholder:hover { background-color: @yellow-todo; }
+          & input.todo { background-color: @yellow-todo; }
+        }
+        &.green {
+          background-color: @green;
+          & input { background-color: @green-todo; }
+          & div.todo { background-color: @green-todo; }
+          & div.todo-add-placeholder:hover { background-color: @green-todo; }
+          & input.todo { background-color: @green-todo; }
+        }
       }
     }
 
@@ -245,7 +302,7 @@ body {
       display: flex;
       justify-content: center;
       background-color: white;
-      border: 1px solid @border-color;
+      border: 1px solid @border-color-dark;
       border-style: dashed;
       border-radius: 5px;
       color: darkslategrey;
