@@ -78,6 +78,18 @@ const mapDispatchToProps = dispatch => {
           description: 'Email and password cannot be blank.'
         });
       }
+      if (!email.includes('@')) {
+        return notification.error({
+          message: 'Your request failed to complete.',
+          description: 'Email is invalid.'
+        });
+      }
+      if (password.length < 6) {
+        return notification.error({
+          message: 'Your request failed to complete.',
+          description: 'Password must be at least 6 characters.'
+        });
+      }
       dispatch(signUpRequest());
       Accounts.createUser({ email, password }, err => {
         if (err) {
