@@ -49,7 +49,7 @@ const Settings = ({
     <div>
       <Title level={4}>Avatar</Title>
       <Avatar icon="user" size="large" />
-      <Button>
+      <Button disabled>
         <Icon type="upload" />
         Upload Image
       </Button>
@@ -78,7 +78,7 @@ const Settings = ({
     <div>
       <Title level={4}>Change Email</Title>
       <Input defaultValue={email} />
-      <Button>Update</Button>
+      <Button disabled>Update</Button>
     </div>
     <Divider />
     <div>
@@ -89,7 +89,7 @@ const Settings = ({
       <Input.Password value="" />
       <div>Confirm New Password</div>
       <Input.Password value="" />
-      <div><Button>Update</Button></div>
+      <div><Button disabled>Update</Button></div>
     </div>
   </Modal>
 );
