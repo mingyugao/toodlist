@@ -25,17 +25,19 @@ import {
 
 const { Title } = Typography;
 
-const scrollToColumn = cid => {
-  document.getElementById(cid).scrollIntoView({
-    behavior: 'smooth',
-    inline: 'center'
-  });
-};
-
 class Column extends Component {
   state = {
     isTitleInputVisible: false,
     isTodoInputVisible: false
+  };
+
+  componentDidMount = () => {
+    document
+      .getElementById(this.props.column.id)
+      .animate({
+        opacity: [0, 1],
+        transform: ['scale(0.8)', 'scale(1)']
+      }, 200);
   };
 
   componentDidUpdate = (_, prev) => {
@@ -71,6 +73,19 @@ class Column extends Component {
     this.setState({ isTitleInputVisible: false });
   };
 
+  deleteTodolist = () => {
+    const cid = this.props.column.id;
+    const anim = document
+      .getElementById(cid)
+      .animate({
+        opacity: [1, 0],
+        transform: ['scale(1)', 'scale(0)']
+      }, 200);
+    anim.onfinish = () => {
+      this.props.deleteTodolist(cid);
+    };
+  };
+
   createTodo = e => {
     this.props.createTodo(
       this.props.column.id,
@@ -92,8 +107,7 @@ class Column extends Component {
     const {
       index,
       column,
-      todos,
-      deleteTodolist
+      todos
     } = this.props;
 
     return (
@@ -108,7 +122,6 @@ class Column extends Component {
             ref={columnProvided.innerRef}
             {...columnProvided.draggableProps}
             {...columnProvided.dragHandleProps}
-            onClick={() => scrollToColumn(column.id)}
           >
             <div>
               {!this.state.isTitleInputVisible && (
@@ -127,20 +140,30 @@ class Column extends Component {
                   onPressEnter={this.updateTitle}
                 />
               )}
-              <Popconfirm
-                okType="danger"
-                title="Delete toodlist?"
-                icon={<Icon type="warning" />}
-                onConfirm={() => deleteTodolist(column.id)}
-              >
+              {todos.length === 0 && (
                 <Button
                   icon="close"
                   shape="circle"
                   size="small"
                   type="danger"
-                  onClick={e => e.stopPropagation()}
+                  onClick={this.deleteTodolist}
                 />
-              </Popconfirm>
+              )}
+              {todos.length !== 0 && (
+                <Popconfirm
+                  okType="danger"
+                  title="Delete toodlist?"
+                  icon={<Icon type="warning" />}
+                  onConfirm={this.deleteTodolist}
+                >
+                  <Button
+                    icon="close"
+                    shape="circle"
+                    size="small"
+                    type="danger"
+                  />
+                </Popconfirm>
+              )}
             </div>
             <Droppable droppableId={column.id} type="todo">
               {innerProvided => (

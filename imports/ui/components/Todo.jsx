@@ -36,12 +36,23 @@ class Todo extends Component {
     this.setState({ isBeingEdited: false });
   };
 
+  deleteTodo = () => {
+    const anim = document
+      .getElementById(this.props.todo.id)
+      .animate({
+        opacity: [1, 0],
+        transform: ['scale(1)', 'scale(0)']
+      }, 200);
+    anim.onfinish = () => {
+      this.props.deleteTodo(this.props.todo.id);
+    }
+  };
+
   render() {
     const {
       index,
       todo,
-      editTodo,
-      deleteTodo
+      editTodo
     } = this.props;
 
     return (
@@ -52,6 +63,7 @@ class Todo extends Component {
         {todoProvided => (
           <div
             className="todo"
+            id={todo.id}
             ref={todoProvided.innerRef}
             {...todoProvided.draggableProps}
             {...todoProvided.dragHandleProps}
@@ -70,7 +82,7 @@ class Todo extends Component {
             <span>
               <a onClick={this.toggleEditTodo}>edit</a>
               {' | '}
-              <a onClick={() => deleteTodo(todo.id)}><Icon type="delete" /></a>
+              <a onClick={this.deleteTodo}><Icon type="delete" /></a>
             </span>
           </div>
         )}
