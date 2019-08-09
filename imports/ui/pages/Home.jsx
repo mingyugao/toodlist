@@ -27,13 +27,14 @@ import { openSettings } from '../actions/Settings';
 
 class Home extends Component {
   componentDidMount() {
-    this.props.getUserData();
+    this.props.getUserData(this.props.history);
   }
 
   render() {
     const {
       history,
       email,
+      avatarSrc,
       todos,
       columns,
       columnOrder,
@@ -83,7 +84,11 @@ class Home extends Component {
             overlayClassName="home-avatar-dropdown"
             trigger={['click']}
           >
-            <Avatar icon="user" />
+            <Avatar
+              icon="user"
+              size="large"
+              src={avatarSrc || ''}
+            />
           </Dropdown>
         </div>
         <div>
@@ -122,6 +127,7 @@ class Home extends Component {
 const mapStateToProps = state => {
   return {
     email: state.home.email,
+    avatarSrc: state.home.avatarSrc,
     todos: state.home.todos,
     columns: state.home.columns,
     columnOrder: state.home.columnOrder,
@@ -131,7 +137,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getUserData: () => {
+    getUserData: history => {
       dispatch(homeGetUserDataRequest());
       Meteor.call(
         'getUserData',
@@ -139,16 +145,14 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(homeGetUserDataFailure());
-            notification.error({
-              message: 'Your request failed to complete.',
-              description: 'Please refresh the page and try again.'
-            });
+            history.push('/');
           } else {
             dispatch(homeGetUserDataSuccess({
+              email: response.emails[0].address,
+              avatarSrc: response.avatarSrc,
               todos: response.todos,
               columns: response.columns,
-              columnOrder: response.columnOrder,
-              email: response.emails[0].address
+              columnOrder: response.columnOrder
             }));
           }
         }

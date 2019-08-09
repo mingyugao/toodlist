@@ -1,17 +1,32 @@
 Meteor.methods({
   getUserData: userId => {
+    if (!userId) throw new Error();
     const user = Meteor.users.findOne(userId);
     if (user.todos === undefined) {
       Meteor.users.update(userId, {
-        $set: { todos: {}, columns: {}, columnOrder: [] }
+        $set: {
+          avatarSrc: '',
+          todos: {},
+          columns: {},
+          columnOrder: []
+        }
       });
     }
     return {
       ...user,
+      avatarSrc: user.avatarSrc || '',
       todos: user.todos || {},
       columns: user.columns || {},
-      columnOrder: user.columnOrder
+      columnOrder: user.columnOrder || []
     };
+  },
+  updateAvatarSrc: (userId, avatarSrc) => {
+    const user = Meteor.users.findOne(userId);
+    Meteor.users.update(userId, {
+      $set: { avatarSrc }
+    }, err => {
+      if (err) return err;
+    });
   },
   createTodolist: (userId, newColumn) => {
     const user = Meteor.users.findOne(userId);

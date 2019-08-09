@@ -11,9 +11,13 @@ import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
 import {
   closeSettings,
-  settingsChangeColumnColorRequest,
-  settingsChangeColumnColorSuccess,
-  settingsChangeColumnColorFailure
+  settingsOnChangeAvatarSrc,
+  settingsUpdateAvatarSrcRequest,
+  settingsUpdateAvatarSrcSuccess,
+  settingsUpdateAvatarSrcFailure,
+  settingsUpdateColumnColorRequest,
+  settingsUpdateColumnColorSuccess,
+  settingsUpdateColumnColorFailure
 } from '../actions/Settings';
 
 const { Title } = Typography;
@@ -31,10 +35,14 @@ const backgroundOptions = [
 
 const Settings = ({
   visible,
+  avatarSrcInput,
   email,
+  avatarSrc,
   columns,
   columnOrder,
-  onColumnColorChange,
+  onChangeAvatarSrc,
+  updateAvatarSrc,
+  updateColumnColor,
   closeSettings
 }) => (
   <Modal
@@ -48,11 +56,25 @@ const Settings = ({
   >
     <div>
       <Title level={4}>Avatar</Title>
-      <Avatar icon="user" size="large" />
-      <Button disabled>
-        <Icon type="upload" />
-        Upload Image
-      </Button>
+      <div>
+        <Avatar
+          icon="user"
+          size="large"
+          src={avatarSrc || ''}
+        />
+        <div>
+          <Input
+            value={avatarSrcInput}
+            placeholder="Enter image URL"
+            onChange={e => onChangeAvatarSrc(e.target.value)}
+          />
+          <Button
+            onClick={() => updateAvatarSrc(avatarSrcInput)}
+          >
+            Update
+          </Button>
+        </div>
+      </div>
     </div>
     <Divider />
     <div>
@@ -68,7 +90,7 @@ const Settings = ({
             <Radio.Group
               options={backgroundOptions}
               value={column.color || 'white'}
-              onChange={e => onColumnColorChange(column.id, e.target.value)}
+              onChange={e => updateColumnColor(column.id, e.target.value)}
             />
           </div>
         );
@@ -97,7 +119,9 @@ const Settings = ({
 const mapStateToProps = state => {
   return {
     visible: state.settings.visible,
+    avatarSrcInput: state.settings.avatarSrc,
     email: state.home.email,
+    avatarSrc: state.home.avatarSrc,
     columns: state.home.columns,
     columnOrder: state.home.columnOrder
   };
@@ -105,8 +129,30 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onColumnColorChange: (cid, color) => {
-      dispatch(settingsChangeColumnColorRequest(cid, color));
+    onChangeAvatarSrc: avatarSrc => {
+      dispatch(settingsOnChangeAvatarSrc(avatarSrc));
+    },
+    updateAvatarSrc: avatarSrc => {
+      dispatch(settingsUpdateAvatarSrcRequest(avatarSrc));
+      Meteor.call(
+        'updateAvatarSrc',
+        Meteor.userId(),
+        avatarSrc,
+        (err, response) => {
+          if (err) {
+            dispatch(settingsUpdateAvatarSrcFailure());
+            notification.error({
+              message: 'Your request failed to complete.',
+              description: 'Please refresh the page and try again.'
+            });
+          } else {
+            dispatch(settingsUpdateAvatarSrcSuccess());
+          }
+        }
+      );
+    },
+    updateColumnColor: (cid, color) => {
+      dispatch(settingsUpdateColumnColorRequest(cid, color));
       Meteor.call(
         'updateColor',
         Meteor.userId(),
@@ -114,13 +160,13 @@ const mapDispatchToProps = dispatch => {
         color,
         (err, response) => {
           if (err) {
-            dispatch(settingsChangeColumnColorFailure());
+            dispatch(settingsUpdateColumnColorFailure());
             notification.error({
               message: 'Your request failed to complete.',
               description: 'Please refresh the page and try again.'
             });
           } else {
-            dispatch(settingsChangeColumnColorSuccess());
+            dispatch(settingsUpdateColumnColorSuccess());
           }
         }
       );

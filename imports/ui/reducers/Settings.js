@@ -1,6 +1,7 @@
 const settingsReducer = (
   state = {
-    visible: false
+    visible: false,
+    avatarSrc: ''
   },
   action
 ) => {
@@ -14,6 +15,11 @@ const settingsReducer = (
       return {
         ...state,
         visible: false
+      };
+    case 'SETTINGS_ON_CHANGE_AVATAR_SRC':
+      return {
+        ...state,
+        avatarSrc: action.payload
       };
     default:
       return state;

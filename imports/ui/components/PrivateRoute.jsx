@@ -8,7 +8,7 @@ const PrivateRoute = ({
   <Route {...rest} render={props => (
     Meteor.userId()
       ? <Component {...props} />
-      : <Redirect to='/login' />
+      : <Redirect to="/login" />
   )} />
 );
 

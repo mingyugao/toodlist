@@ -1,6 +1,7 @@
 const homeReducer = (
   state = {
     email: '',
+    avatarSrc: '',
     todos: {},
     columns: {},
     columnOrder: []
@@ -138,7 +139,7 @@ const homeReducer = (
       todos: newTodos,
       columns: newColumns
     };
-  } else if (action.type === 'SETTINGS_CHANGE_COLUMN_COLOR_REQUEST') {
+  } else if (action.type === 'SETTINGS_UPDATE_COLUMN_COLOR_REQUEST') {
     const { cid, color } = action.payload;
     return {
       ...state,
@@ -146,6 +147,11 @@ const homeReducer = (
         ...state.columns,
         [cid]: { ...state.columns[cid], color }
       }
+    };
+  } else if (action.type ==='SETTINGS_UPDATE_AVATAR_SRC_REQUEST') {
+    return {
+      ...state,
+      avatarSrc: action.payload
     };
   }
   return state;
