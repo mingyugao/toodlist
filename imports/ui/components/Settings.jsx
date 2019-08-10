@@ -47,6 +47,7 @@ const Settings = ({
 }) => (
   <Modal
     centered
+    destroyOnClose
     footer={null}
     maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
     title={<Title level={3}>Settings</Title>}
@@ -64,7 +65,7 @@ const Settings = ({
         />
         <div>
           <Input
-            value={avatarSrcInput}
+            defaultValue={avatarSrc}
             placeholder="Enter image URL"
             onChange={e => onChangeAvatarSrc(e.target.value)}
           />
