@@ -10,6 +10,7 @@ import {
   Droppable
 } from 'react-beautiful-dnd';
 import Column from '../components/Column';
+import Loading from '../components/Loading';
 import Settings from '../components/Settings';
 import {
   homeSignOut,
@@ -33,6 +34,7 @@ class Home extends Component {
   render() {
     const {
       history,
+      isLoading,
       email,
       avatarSrc,
       todos,
@@ -119,6 +121,7 @@ class Home extends Component {
           </DragDropContext>
         </div>
         <Settings />
+        {isLoading && (<Loading />)}
       </div>
     );
   }
@@ -126,6 +129,7 @@ class Home extends Component {
 
 const mapStateToProps = state => {
   return {
+    isLoading: state.home.isLoading,
     email: state.home.email,
     avatarSrc: state.home.avatarSrc,
     todos: state.home.todos,
