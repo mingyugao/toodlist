@@ -1,5 +1,6 @@
 Meteor.methods({
   getUserData: userId => {
+    console.log('getUserData', 'userId', userId);
     if (!userId) throw new Error();
     const user = Meteor.users.findOne(userId);
     if (user.todos === undefined) {
@@ -21,6 +22,7 @@ Meteor.methods({
     };
   },
   updateAvatarSrc: (userId, avatarSrc) => {
+    console.log('updateAvatarSrc', 'userId', userId, 'avatarSrc', avatarSrc);
     const user = Meteor.users.findOne(userId);
     Meteor.users.update(userId, {
       $set: { avatarSrc }
@@ -29,6 +31,7 @@ Meteor.methods({
     });
   },
   createTodolist: (userId, newColumn) => {
+    console.log('createTodolist', 'userId', userId, 'newColumn', newColumn);
     const user = Meteor.users.findOne(userId);
     Meteor.users.update(userId, {
       $set: {
@@ -43,6 +46,7 @@ Meteor.methods({
     });
   },
   updateTitle: (userId, cid, title) => {
+    console.log('updateTitle', 'userId', userId, 'cid', cid, 'title', title);
     const user = Meteor.users.findOne(userId);
     Meteor.users.update(userId, {
       $set: {
@@ -56,6 +60,7 @@ Meteor.methods({
     });
   },
   updateColor: (userId, cid, color) => {
+    console.log('updateColor', 'userId', userId, 'cid', cid, 'color', color);
     const user = Meteor.users.findOne(userId);
     Meteor.users.update(userId, {
       $set: {
@@ -69,6 +74,7 @@ Meteor.methods({
     });
   },
   deleteTodolist: (userId, cid) => {
+    console.log('deleteTodolist', 'userId', userId, 'cid', cid);
     const user = Meteor.users.findOne(userId);
 
     const todoIdsToDelete = [ ...user.columns[cid].todoIds ];
@@ -95,6 +101,7 @@ Meteor.methods({
     });
   },
   createTodo: (userId, cid, newTodo) => {
+    console.log('createTodo', 'userId', userId, 'cid', cid, 'newTodo', newTodo);
     const user = Meteor.users.findOne(userId);
 
     const newTodos = {
@@ -115,6 +122,7 @@ Meteor.methods({
     });
   },
   editTodo: (userId, todo) => {
+    console.log('editTodo', 'userId', userId, 'todo', todo);
     const user = Meteor.users.findOne(userId);
     Meteor.users.update(userId, {
       $set: {
@@ -128,6 +136,7 @@ Meteor.methods({
     });
   },
   deleteTodo: (userId, tid) => {
+    console.log('deleteTodo', 'userId', userId, 'tid', tid);
     const user = Meteor.users.findOne(userId);
 
     const newTodos = { ...user.todos };
@@ -152,6 +161,7 @@ Meteor.methods({
     });
   },
   dragAndDrop: (userId, result) => {
+    console.log('dragAndDrop', 'userId', userId, 'result', result);
     const user = Meteor.users.findOne(userId);
 
     const {
