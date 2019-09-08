@@ -1,6 +1,5 @@
 Meteor.methods({
   getUserData: userId => {
-    console.log('getUserData', 'userId', userId);
     if (!userId) throw new Error();
     const user = Meteor.users.findOne(userId);
     if (user.todos === undefined) {
@@ -22,59 +21,66 @@ Meteor.methods({
     };
   },
   updateAvatarSrc: (userId, avatarSrc) => {
-    console.log('updateAvatarSrc', 'userId', userId, 'avatarSrc', avatarSrc);
     const user = Meteor.users.findOne(userId);
-    Meteor.users.update(userId, {
-      $set: { avatarSrc }
-    }, err => {
-      if (err) return err;
-    });
+    try {
+      Meteor.users.update(userId, {
+        $set: { avatarSrc }
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   createTodolist: (userId, newColumn) => {
-    console.log('createTodolist', 'userId', userId, 'newColumn', newColumn);
     const user = Meteor.users.findOne(userId);
-    Meteor.users.update(userId, {
-      $set: {
-        columns: {
-          ...user.columns,
-          [newColumn.id]: newColumn
-        },
-        columnOrder: [ ...user.columnOrder, newColumn.id ]
-      }
-    }, err => {
-      if (err) return err;
-    });
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          columns: {
+            ...user.columns,
+            [newColumn.id]: newColumn
+          },
+          columnOrder: [ ...user.columnOrder, newColumn.id ]
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   updateTitle: (userId, cid, title) => {
-    console.log('updateTitle', 'userId', userId, 'cid', cid, 'title', title);
     const user = Meteor.users.findOne(userId);
-    Meteor.users.update(userId, {
-      $set: {
-        columns: {
-          ...user.columns,
-          [cid]: { ...user.columns[cid], title }
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          columns: {
+            ...user.columns,
+            [cid]: { ...user.columns[cid], title }
+          }
         }
-      }
-    }, err => {
-      if (err) return err;
-    });
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   updateColor: (userId, cid, color) => {
-    console.log('updateColor', 'userId', userId, 'cid', cid, 'color', color);
     const user = Meteor.users.findOne(userId);
-    Meteor.users.update(userId, {
-      $set: {
-        columns: {
-          ...user.columns,
-          [cid]: { ...user.columns[cid], color }
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          columns: {
+            ...user.columns,
+            [cid]: { ...user.columns[cid], color }
+          }
         }
-      }
-    }, err => {
-      if (err) return err;
-    });
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   deleteTodolist: (userId, cid) => {
-    console.log('deleteTodolist', 'userId', userId, 'cid', cid);
     const user = Meteor.users.findOne(userId);
 
     const todoIdsToDelete = [ ...user.columns[cid].todoIds ];
@@ -90,18 +96,20 @@ Meteor.methods({
 
     const newColumnOrder = user.columnOrder.filter(c => c !== cid);
 
-    Meteor.users.update(userId, {
-      $set: {
-        todos: newTodos,
-        columns: newColumns,
-        columnOrder: newColumnOrder
-      }
-    }, err => {
-      if (err) return err;
-    });
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          todos: newTodos,
+          columns: newColumns,
+          columnOrder: newColumnOrder
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   createTodo: (userId, cid, newTodo) => {
-    console.log('createTodo', 'userId', userId, 'cid', cid, 'newTodo', newTodo);
     const user = Meteor.users.findOne(userId);
 
     const newTodos = {
@@ -112,31 +120,35 @@ Meteor.methods({
     const newColumns = { ...user.columns };
     newColumns[cid].todoIds.push(newTodo.id);
 
-    Meteor.users.update(userId, {
-      $set: {
-        todos: newTodos,
-        columns: newColumns
-      }
-    }, err => {
-      if (err) return err;
-    });
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          todos: newTodos,
+          columns: newColumns
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   editTodo: (userId, todo) => {
-    console.log('editTodo', 'userId', userId, 'todo', todo);
     const user = Meteor.users.findOne(userId);
-    Meteor.users.update(userId, {
-      $set: {
-        todos: {
-          ...user.todos,
-          [todo.id]: todo
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          todos: {
+            ...user.todos,
+            [todo.id]: todo
+          }
         }
-      }
-    }, err => {
-      if (err) return err;
-    });
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   deleteTodo: (userId, tid) => {
-    console.log('deleteTodo', 'userId', userId, 'tid', tid);
     const user = Meteor.users.findOne(userId);
 
     const newTodos = { ...user.todos };
@@ -151,17 +163,19 @@ Meteor.methods({
         });
     });
 
-    Meteor.users.update(userId, {
-      $set: {
-        todos: newTodos,
-        columns: newColumns
-      }
-    }, err => {
-      if (err) return err;
-    });
+    try {
+      Meteor.users.update(userId, {
+        $set: {
+          todos: newTodos,
+          columns: newColumns
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      throw new Error();
+    }
   },
   dragAndDrop: (userId, result) => {
-    console.log('dragAndDrop', 'userId', userId, 'result', result);
     const user = Meteor.users.findOne(userId);
 
     const {
@@ -176,13 +190,16 @@ Meteor.methods({
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
 
-      Meteor.users.update(userId, {
-        $set: {
-          columnOrder: newColumnOrder
-        }
-      }, err => {
-        if (err) return err;
-      });
+      try {
+        Meteor.users.update(userId, {
+          $set: {
+            columnOrder: newColumnOrder
+          }
+        });
+      } catch (e) {
+        console.log(e);
+        throw new Error();
+      }
     } else {
       const sourceColumn = user.columns[source.droppableId];
       const newSourceTodoIds = [ ...sourceColumn.todoIds ];
@@ -199,17 +216,20 @@ Meteor.methods({
         todoIds: newDestinationTodoIds
       };
 
-      Meteor.users.update(userId, {
-        $set: {
-          columns: {
-            ...user.columns,
-            [newSourceColumn.id]: newSourceColumn,
-            [newDestinationColumn.id]: newDestinationColumn
+      try {
+        Meteor.users.update(userId, {
+          $set: {
+            columns: {
+              ...user.columns,
+              [newSourceColumn.id]: newSourceColumn,
+              [newDestinationColumn.id]: newDestinationColumn
+            }
           }
-        }
-      }, err => {
-        if (err) return err;
-      });
+        });
+      } catch (e) {
+        console.log(e);
+        throw new Error();
+      }
     }
   },
   sendPasswordResetLink: email => {
