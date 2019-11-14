@@ -1,6 +1,7 @@
 const settingsReducer = (
   state = {
     visible: false,
+    email: '',
     avatarSrc: ''
   },
   action
@@ -20,6 +21,11 @@ const settingsReducer = (
       return {
         ...state,
         avatarSrc: action.payload
+      };
+    case 'SETTINGS_ON_CHANGE_EMAIL':
+      return {
+        ...state,
+        email: action.payload
       };
     default:
       return state;

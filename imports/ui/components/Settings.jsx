@@ -11,6 +11,10 @@ import Typography from 'antd/lib/typography';
 import notification from 'antd/lib/notification';
 import {
   closeSettings,
+  settingsOnChangeEmail,
+  settingsUpdateEmailRequest,
+  settingsUpdateEmailSuccess,
+  settingsUpdateEmailFailure,
   settingsOnChangeAvatarSrc,
   settingsUpdateAvatarSrcRequest,
   settingsUpdateAvatarSrcSuccess,
@@ -35,15 +39,18 @@ const backgroundOptions = [
 
 const Settings = ({
   visible,
+  emailInput,
   avatarSrcInput,
   email,
   avatarSrc,
   columns,
   columnOrder,
+  closeSettings,
+  onChangeEmail,
+  updateEmail,
   onChangeAvatarSrc,
   updateAvatarSrc,
   updateColumnColor,
-  closeSettings
 }) => (
   <Modal
     centered
@@ -100,18 +107,22 @@ const Settings = ({
     <Divider />
     <div>
       <Title level={4}>Change Email</Title>
-      <Input defaultValue={email} />
-      <Button disabled>Update</Button>
+      <Input
+        disabled
+        defaultValue={email}
+        onChange={e => onChangeEmail(e.target.value)}
+      />
+      <Button disabled onClick={() => updateEmail(emailInput)}>Update</Button>
     </div>
     <Divider />
     <div>
       <Title level={4}>Change Password</Title>
       <div>Current Password</div>
-      <Input.Password value="" />
+      <Input.Password disabled value="" />
       <div>New Password</div>
-      <Input.Password value="" />
+      <Input.Password disabled value="" />
       <div>Confirm New Password</div>
-      <Input.Password value="" />
+      <Input.Password disabled value="" />
       <div><Button disabled>Update</Button></div>
     </div>
   </Modal>
@@ -120,6 +131,7 @@ const Settings = ({
 const mapStateToProps = state => {
   return {
     visible: state.settings.visible,
+    emailInput: state.settings.email,
     avatarSrcInput: state.settings.avatarSrc,
     email: state.home.email,
     avatarSrc: state.home.avatarSrc,
@@ -130,6 +142,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    closeSettings: () => {
+      dispatch(closeSettings());
+    },
+    onChangeEmail: email => {
+      dispatch(settingsOnChangeEmail(email));
+    },
+    updateEmail: email => {
+      // TODO
+    },
     onChangeAvatarSrc: avatarSrc => {
       dispatch(settingsOnChangeAvatarSrc(avatarSrc));
     },
@@ -171,9 +192,6 @@ const mapDispatchToProps = dispatch => {
           }
         }
       );
-    },
-    closeSettings: () => {
-      dispatch(closeSettings());
     }
   };
 };

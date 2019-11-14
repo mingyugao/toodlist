@@ -10,6 +10,31 @@ export const closeSettings = () => {
   };
 };
 
+export const settingsOnChangeEmail = email => {
+  return {
+    type: 'SETTINGS_ON_CHANGE_EMAIL',
+    payload: email
+  };
+};
+
+export const settingsUpdateEmailRequest = () => {
+  return {
+    type: 'SETTINGS_UPDATE_EMAIL_REQUEST'
+  };
+};
+
+export const settingsUpdateEmailSuccess = () => {
+  return {
+    type: 'SETTINGS_UPDATE_EMAIL_SUCCESS'
+  };
+};
+
+export const settingsUpdateEmailFailure = () => {
+  return {
+    type: 'SETTINGS_UPDATE_EMAIL_FAILURE'
+  };
+};
+
 export const settingsOnChangeAvatarSrc = avatarSrc => {
   return {
     type: 'SETTINGS_ON_CHANGE_AVATAR_SRC',
