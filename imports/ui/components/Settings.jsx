@@ -8,7 +8,7 @@ import Input from 'antd/lib/input';
 import Modal from 'antd/lib/modal';
 import Radio from 'antd/lib/radio';
 import Typography from 'antd/lib/typography';
-import notification from 'antd/lib/notification';
+import message from 'antd/lib/message';
 import {
   closeSettings,
   settingsOnChangeEmail,
@@ -163,10 +163,9 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(settingsUpdateAvatarSrcFailure());
-            notification.error({
-              message: 'Your request failed to complete.',
-              description: 'Please refresh the page and try again.'
-            });
+            message.error(
+              'Your request failed to complete, please try again.'
+            );
           } else {
             dispatch(settingsUpdateAvatarSrcSuccess());
           }
@@ -183,10 +182,9 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(settingsUpdateColumnColorFailure());
-            notification.error({
-              message: 'Your request failed to complete.',
-              description: 'Please refresh the page and try again.'
-            });
+            message.error(
+              'Your request failed to complete, please try again.'
+            );
           } else {
             dispatch(settingsUpdateColumnColorSuccess());
           }

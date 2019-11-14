@@ -4,7 +4,7 @@ import Avatar from 'antd/lib/avatar';
 import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
 import Menu from 'antd/lib/menu';
-import notification from 'antd/lib/notification';
+import message from 'antd/lib/message';
 import {
   DragDropContext,
   Droppable
@@ -182,10 +182,9 @@ const mapDispatchToProps = dispatch => {
           (err, response) => {
             if (err) {
               dispatch(homeDragAndDropFailure());
-              notification.error({
-                message: 'Your request failed to complete.',
-                description: 'Please refresh the page and try again.'
-              });
+              message.error(
+                'Your request failed to complete, please try again.'
+              );
             } else {
               dispatch(homeDragAndDropSuccess());
             }
@@ -208,10 +207,9 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(homeCreateTodolistFailure());
-            notification.error({
-              message: 'Your request failed to complete.',
-              description: 'Please refresh the page and try again.'
-            });
+            message.error(
+              'Your request failed to complete, please try again.'
+            );
           } else {
             dispatch(homeCreateTodolistSuccess());
           }

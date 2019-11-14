@@ -5,7 +5,7 @@ import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
-import notification from 'antd/lib/notification';
+import message from 'antd/lib/message';
 import {
   Droppable,
   Draggable
@@ -223,10 +223,9 @@ const mapDispatchToProps = dispatch => {
           (err, response) => {
             if (err) {
               dispatch(columnUpdateTitleFailure());
-              notification.error({
-                message: 'Your request failed to complete.',
-                description: 'Please refresh the page and try again.'
-              });
+              message.error(
+                'Your request failed to complete, please try again.'
+              );
             } else {
               dispatch(columnUpdateTitleSuccess());
             }
@@ -243,10 +242,9 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(columnDeleteTodolistFailure());
-            notification.error({
-              message: 'Your request failed to complete.',
-              description: 'Please refresh the page and try again.'
-            });
+            message.error(
+              'Your request failed to complete, please try again.'
+            );
           } else {
             dispatch(columnDeleteTodolistSuccess());
           }
@@ -268,10 +266,9 @@ const mapDispatchToProps = dispatch => {
           (err, response) => {
             if (err) {
               dispatch(columnCreateTodoFailure());
-              notification.error({
-                message: 'Your request failed to complete.',
-                description: 'Please refresh the page and try again.'
-              });
+              message.error(
+                'Your request failed to complete, please try again.'
+              );
             } else {
               dispatch(columnCreateTodoSuccess());
             }

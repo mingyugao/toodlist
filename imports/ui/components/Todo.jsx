@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
-import notification from 'antd/lib/notification';
+import message from 'antd/lib/message';
 import { Draggable } from 'react-beautiful-dnd';
 import {
   todoEditRequest,
@@ -107,10 +107,9 @@ const mapDispatchToProps = dispatch => {
           (err, response) => {
             if (err) {
               dispatch(todoEditFailure());
-              notification.error({
-                message: 'Your request failed to complete.',
-                description: 'Please refresh the page and try again.'
-              });
+              message.error(
+                'Your request failed to complete, please try again.'
+              );
             } else {
               dispatch(todoEditSuccess());
             }
@@ -127,10 +126,9 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(todoDeleteFailure());
-            notification.error({
-              message: 'Your request failed to complete.',
-              description: 'Please refresh the page and try again.'
-            });
+            message.error(
+              'Your request failed to complete, please try again.'
+            );
           } else {
             dispatch(todoDeleteSuccess());
           }

@@ -5,7 +5,7 @@ import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import Typography from 'antd/lib/typography';
-import notification from 'antd/lib/notification';
+import message from 'antd/lib/message';
 import {
   forgotPasswordOnChangeEmail as onChangeEmail,
   forgotPasswordSendLinkRequest,
@@ -67,24 +67,17 @@ const mapDispatchToProps = dispatch => {
   return {
     onChangeEmail: email => dispatch(onChangeEmail(email)),
     sendPasswordResetLink: email => {
-      if (!email) {
-        return notification.error({
-          message: 'Your request failed to complete.',
-          description: 'Email cannot be empty.'
-        });
-      }
-      dispatch(forgotPasswordSendLinkRequest());
-      setTimeout(() => {
-        dispatch(forgotPasswordSendLinkSuccess());
-      }, 1000);
+      // TODO
+      return message.error(
+        'Sorry, this feature is not implemented yet :('
+      );
       // dispatch(forgotPasswordSendLinkRequest());
       // Meteor.call('sendPasswordResetLink', email, err => {
       //   if (err) {
       //     dispatch(forgotPasswordSendLinkFailure());
-      //     return notification.error({
-      //       message: 'Your request failed to complete.',
-      //       description: 'There is no user registered under this email.'
-      //     });
+      //     return message.error(
+      //       'There is no user registered under this email.'
+      //     );
       //   } else {
       //     dispatch(forgotPasswordSendLinkSuccess());
       //   }
