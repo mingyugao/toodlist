@@ -37,13 +37,16 @@ class Todo extends Component {
   };
 
   deleteTodo = () => {
-    const anim = document
-      .getElementById(this.props.todo.id)
-      .animate({
+    const todo = document.getElementById(this.props.todo.id);
+    if (todo.animate) {
+      const anim = todo.animate({
         opacity: [1, 0],
         transform: ['scale(1)', 'scale(0)']
       }, 200);
-    anim.onfinish = () => {
+      anim.onfinish = () => {
+        this.props.deleteTodo(this.props.todo.id);
+      }
+    } else {
       this.props.deleteTodo(this.props.todo.id);
     }
   };

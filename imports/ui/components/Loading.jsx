@@ -5,7 +5,7 @@ const { Title } = Typography;
 
 const Loading = () => (
   <div id="loading">
-    <img src="cat_no_bg.png" alt="loading" />
+    <img src="loading.jpg" alt="loading" />
     <Title>Loading...</Title>
   </div>
 );

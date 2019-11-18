@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/styles';
 import Button from 'antd/lib/button';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
@@ -23,7 +24,31 @@ import {
   columnCreateTodoFailure
 } from '../actions/Column';
 
-const { Title } = Typography;
+const styles = theme => ({
+  column: {
+    border: '1px solid #dddddd',
+    borderRadius: '5px',
+    padding: '0.5rem',
+    height: 'fit-content',
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: '1rem',
+      width: '100%'
+    },
+    [theme.breakpoints.up('md')]: {
+      minWidth: '22rem',
+      maxWidth: '22rem',
+      marginRight: '1rem'
+    }
+  },
+  todoContainer: {
+    [theme.breakpoints.down('sm')]: {
+      minHeight: '10rem'
+    },
+    [theme.breakpoints.up('md')]: {
+      minHeight: '12rem'
+    }
+  }
+});
 
 class Column extends Component {
   state = {
@@ -32,12 +57,13 @@ class Column extends Component {
   };
 
   componentDidMount = () => {
-    document
-      .getElementById(this.props.column.id)
-      .animate({
+    const column = document.getElementById(this.props.column.id);
+    if (column.animate) {
+      column.animate({
         opacity: [0, 1],
         transform: ['scale(0.8)', 'scale(1)']
       }, 200);
+    }
   };
 
   componentDidUpdate = (_, prev) => {
@@ -75,15 +101,18 @@ class Column extends Component {
 
   deleteTodolist = () => {
     const cid = this.props.column.id;
-    const anim = document
-      .getElementById(cid)
-      .animate({
+    const column = document.getElementById(cid);
+    if (column.animate) {
+      const anim = column.animate({
         opacity: [1, 0],
         transform: ['scale(1)', 'scale(0)']
       }, 200);
-    anim.onfinish = () => {
+      anim.onfinish = () => {
+        this.props.deleteTodolist(cid);
+      };
+    } else {
       this.props.deleteTodolist(cid);
-    };
+    }
   };
 
   createTodo = e => {
@@ -105,6 +134,7 @@ class Column extends Component {
 
   render() {
     const {
+      classes,
       index,
       column,
       todos
@@ -117,7 +147,7 @@ class Column extends Component {
       >
         {columnProvided => (
           <div
-            className={`${column.color || 'white'} column`}
+            className={`${column.color || 'white'} ${classes.column}`}
             id={column.id}
             ref={columnProvided.innerRef}
             {...columnProvided.draggableProps}
@@ -125,12 +155,12 @@ class Column extends Component {
           >
             <div>
               {!this.state.isTitleInputVisible && (
-                <Title
+                <Typography.Title
                   level={4}
                   onClick={this.toggleEditTitle}
                 >
                   {column.title}
-                </Title>
+                </Typography.Title>
               )}
               {this.state.isTitleInputVisible && (
                 <Input
@@ -151,6 +181,7 @@ class Column extends Component {
               )}
               {todos.length !== 0 && (
                 <Popconfirm
+                  placement="bottomRight"
                   okType="danger"
                   title="Delete toodlist?"
                   icon={<Icon type="warning" />}
@@ -168,6 +199,7 @@ class Column extends Component {
             <Droppable droppableId={column.id} type="todo">
               {innerProvided => (
                 <div
+                  className={classes.todoContainer}
                   ref={innerProvided.innerRef}
                   {...innerProvided.droppableProps}
                 >
@@ -279,4 +311,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Column);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Column));

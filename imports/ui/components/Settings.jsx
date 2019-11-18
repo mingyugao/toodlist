@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/styles';
 import Avatar from 'antd/lib/avatar';
 import Button from 'antd/lib/button';
 import Divider from 'antd/lib/divider';
@@ -24,7 +25,29 @@ import {
   settingsUpdateColumnColorFailure
 } from '../actions/Settings';
 
-const { Title } = Typography;
+const styles = theme => ({
+  root: {
+    [theme.breakpoints.down('sm')]: {
+      height: '85%',
+      margin: '0'
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '55% !important',
+      height: '100%',
+      paddingTop: '24px',
+    },
+    '& div.ant-modal-body': {
+      flexGrow: '1',
+      overflow: 'scroll',
+      [theme.breakpoints.down('sm')]: {
+        padding: '1rem 8% 3rem',
+      },
+      [theme.breakpoints.up('md')]: {
+        padding: '1rem 16% 3rem',
+      }
+    }
+  }
+});
 
 const backgroundOptions = [
   { label: '', value: 'white' },
@@ -38,6 +61,7 @@ const backgroundOptions = [
 ];
 
 const Settings = ({
+  classes,
   visible,
   emailInput,
   avatarSrcInput,
@@ -53,17 +77,17 @@ const Settings = ({
   updateColumnColor,
 }) => (
   <Modal
+    className={classes.root}
     centered
     destroyOnClose
     footer={null}
     maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
-    title={<Title level={3}>Settings</Title>}
+    title={<Typography.Title level={3}>Settings</Typography.Title>}
     visible={visible}
-    width="55%"
     onCancel={() => closeSettings()}
   >
     <div>
-      <Title level={4}>Avatar</Title>
+      <Typography.Title level={4}>Avatar</Typography.Title>
       <div>
         <Avatar
           icon="user"
@@ -86,7 +110,7 @@ const Settings = ({
     </div>
     <Divider />
     <div>
-      <Title level={4}>Toodlist Colors</Title>
+      <Typography.Title level={4}>Toodlist Colors</Typography.Title>
       {columnOrder.length === 0 && (
         <span>You don't have any toodlists.</span>
       )}
@@ -106,7 +130,7 @@ const Settings = ({
     </div>
     <Divider />
     <div>
-      <Title level={4}>Change Email</Title>
+      <Typography.Title level={4}>Change Email</Typography.Title>
       <Input
         disabled
         defaultValue={email}
@@ -116,7 +140,7 @@ const Settings = ({
     </div>
     <Divider />
     <div>
-      <Title level={4}>Change Password</Title>
+      <Typography.Title level={4}>Change Password</Typography.Title>
       <div>Current Password</div>
       <Input.Password disabled value="" />
       <div>New Password</div>
@@ -194,4 +218,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Settings));

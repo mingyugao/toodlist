@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Avatar from 'antd/lib/avatar';
 import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
@@ -26,105 +28,193 @@ import {
 } from '../actions/Home';
 import { openSettings } from '../actions/Settings';
 
-class Home extends Component {
-  componentDidMount() {
-    this.props.getUserData(this.props.history);
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    width: '100vw',
+    height: '100vh',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column'
+    },
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row-reverse',
+      justifyContent: 'space-between'
+    }
+  },
+  toolBar: {
+    [theme.breakpoints.down('sm')]: {
+      padding: '0.5rem 1rem 0.5rem',
+      backgroundColor: 'rgba(255,255,255,0.8)',
+      '& > h1': {
+        position: 'absolute',
+        top: '0',
+        left: '50%',
+        transform: 'translate(-50%, 15%)',
+        margin: '0'
+      }
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '1rem 1rem',
+      '& > span': {
+        cursor: 'pointer'
+      },
+      '& > h1': {
+        display: 'none'
+      }
+    }
+  },
+  listContainer: {
+    display: 'flex',
+    padding: '1rem',
+    overflow: 'auto',
+    '& > div:nth-of-type(1)': {
+      display: 'flex'
+    },
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      '& > div:nth-of-type(1)': {
+        flexDirection: 'column'
+      }
+    },
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+      '& > div:nth-of-type(1)': {
+        flexDirection: 'row'
+      }
+    }
+  },
+  columnAddPlaceholder: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    border: '1px solid darkslategrey',
+    borderStyle: 'dashed',
+    borderRadius: '5px',
+    color: 'darkslategrey',
+    cursor: 'pointer',
+    opacity: '0.8',
+    padding: '0.5rem',
+    width: '100%',
+    height: 'fit-content',
+    '& > i': {
+      marginTop: '4px'
+    },
+    [theme.breakpoints.up('md')]: {
+      marginRight: '1rem',
+      minWidth: '22rem',
+      maxWidth: '22rem',
+      '&:hover': {
+        borderColor: 'black',
+        color: 'black',
+        opacity: '1'
+      }
+    }
   }
+});
 
-  render() {
-    const {
-      history,
-      isLoading,
-      email,
-      avatarSrc,
-      todos,
-      columns,
-      columnOrder,
-      isSettingsOpen,
-      openSettings,
-      signOut,
-      onDragEnd,
-      createTodolist
-    } = this.props;
+function Home({
+  classes,
+  history,
+  isLoading,
+  email,
+  avatarSrc,
+  todos,
+  columns,
+  columnOrder,
+  isSettingsOpen,
+  getUserData,
+  openSettings,
+  signOut,
+  onDragEnd,
+  createTodolist
+}) {
+  useEffect(() => {
+    getUserData(history);
+  }, []);
 
-    const avatarMenu = (
-      <Menu>
-        <Menu.Item disabled>
-          {email}
-        </Menu.Item>
-        <Menu.Divider />
-        <Menu.Item onClick={() => openSettings(history)}>
-          Settings
-        </Menu.Item>
-        <Menu.Item onClick={() => signOut(history)}>
-          Log out
-        </Menu.Item>
-      </Menu>
-    );
+  const isMobile = () => {
+    return useMediaQuery(theme => theme.breakpoints.down('sm'));
+  };
 
-    const renderedColumns = columnOrder.map((cid, index) => {
-      const column = columns[cid];
-      const theseTodos = column.todoIds.map(tid => todos[tid]);
-      return (
-        <Column
-          key={cid}
-          index={index}
-          column={column}
-          todos={theseTodos}
-        />
-      );
-    });
+  const avatarMenu = (
+    <Menu>
+      <Menu.Item disabled>
+        {email}
+      </Menu.Item>
+      <Menu.Divider />
+      <Menu.Item onClick={() => openSettings(history)}>
+        Settings
+      </Menu.Item>
+      <Menu.Item onClick={() => signOut(history)}>
+        Log out
+      </Menu.Item>
+    </Menu>
+  );
 
+  const renderedColumns = columnOrder.map((cid, index) => {
+    const column = columns[cid];
+    const theseTodos = column.todoIds.map(tid => todos[tid]);
     return (
-      <div
-        id="home"
-        style={isSettingsOpen ? { filter: 'blur(2px)' } : {}}
-      >
-        <div>
-          <Dropdown
-            overlay={avatarMenu}
-            overlayClassName="home-avatar-dropdown"
-            trigger={['click']}
-          >
-            <Avatar
-              icon="user"
-              size="large"
-              src={avatarSrc || ''}
-            />
-          </Dropdown>
-        </div>
-        <div>
-          <DragDropContext
-            onDragEnd={result => onDragEnd(result)}
-          >
-            <Droppable
-              droppableId="main-droppable-container"
-              direction="horizontal"
-              type="column"
-            >
-              {mainProvided => (
-                <div
-                  ref={mainProvided.innerRef}
-                  {...mainProvided.droppableProps}
-                >
-                  {renderedColumns}
-                  {mainProvided.placeholder}
-                </div>
-              )}
-            </Droppable>
-            <div
-              className="column-add-placeholder"
-              onClick={() => createTodolist()}
-            >
-              <Icon type="plus" />&nbsp;new toodlist
-            </div>
-          </DragDropContext>
-        </div>
-        <Settings />
-        {isLoading && (<Loading />)}
-      </div>
+      <Column
+        key={cid}
+        index={index}
+        column={column}
+        todos={theseTodos}
+      />
     );
-  }
+  });
+
+  return (
+    <div
+      id="home"
+      className={classes.root}
+      style={isSettingsOpen ? { filter: 'blur(2px)' } : {}}
+    >
+      <div className={classes.toolBar}>
+        <Dropdown
+          overlay={avatarMenu}
+          overlayClassName="home-avatar-dropdown"
+          trigger={['click']}
+        >
+          <Avatar
+            icon="user"
+            size="large"
+            src={avatarSrc || ''}
+          />
+        </Dropdown>
+        <h1>toodlist</h1>
+      </div>
+      <div className={classes.listContainer}>
+        <DragDropContext
+          onDragEnd={result => onDragEnd(result)}
+        >
+          <Droppable
+            droppableId="main-droppable-container"
+            direction={isMobile() ? 'vertical' : 'horizontal'}
+            type="column"
+          >
+            {mainProvided => (
+              <div
+                ref={mainProvided.innerRef}
+                {...mainProvided.droppableProps}
+              >
+                {renderedColumns}
+                {mainProvided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div
+            className={classes.columnAddPlaceholder}
+            onClick={() => createTodolist()}
+          >
+            <Icon type="plus" />&nbsp;new toodlist
+          </div>
+        </DragDropContext>
+      </div>
+      <Settings />
+      {isLoading && (<Loading />)}
+    </div>
+  );
 }
 
 const mapStateToProps = state => {
@@ -219,4 +309,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Home));
