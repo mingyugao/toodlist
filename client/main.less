@@ -8,32 +8,23 @@ body {
 }
 
 #sign-in {
-  & > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  & > div > form {
+    margin-bottom: 2em;
 
-    background-color: white;
-    border: 1px solid @border-color-xlight;
-    border-radius: 5px;
-    padding: 3rem;
-    text-align: center;
-    width: 32rem;
-    height: 36rem;
-
-    & > div {
-      padding: 1rem 4rem;
+    & > div.ant-form-item {
+      margin-bottom: 0.5em;
       text-align: left;
+    }
+  }
+}
 
-      & > span {
-        &:nth-of-type(1) { margin-bottom: 0.5rem; }
-        &:nth-of-type(2) { margin-bottom: 0.2rem; }
-        & > span.ant-input-prefix { color: darkgrey; }
-        & > input.ant-input { padding-left: 2rem; }
-      }
+#sign-up {
+  & > div > form {
+    margin-bottom: 2em;
 
-      & > button { margin-top: 1rem; }
+    & > div.ant-form-item {
+      margin-bottom: 0.5em;
+      text-align: left;
     }
   }
 }
@@ -69,36 +60,6 @@ body {
         margin-top: 0.2rem;
         margin-bottom: 2.3rem;
       }
-    }
-  }
-}
-
-#sign-up {
-  & > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    background-color: white;
-    border: 1px solid @border-color-xlight;
-    border-radius: 5px;
-    padding: 3rem;
-    text-align: center;
-    width: 32rem;
-    height: 36rem;
-
-    & > div {
-      padding: 1rem 4rem;
-
-      & > span {
-        &:nth-of-type(1) { margin-bottom: 0.5rem; }
-        &:nth-of-type(2) { margin-bottom: 0.2rem; }
-        & > span.ant-input-prefix { color: darkgrey; }
-        & > input.ant-input { padding-left: 2rem; }
-      }
-
-      & > button { margin-top: 1rem; }
     }
   }
 }

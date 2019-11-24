@@ -1,110 +1,43 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/styles';
 import { Link, Redirect } from 'react-router-dom';
-import Button from 'antd/lib/button';
-import Icon from 'antd/lib/icon';
-import Input from 'antd/lib/input';
 import Typography from 'antd/lib/typography';
-import notification from 'antd/lib/notification';
-import {
-  signUpOnChangeEmail as onChangeEmail,
-  signUpOnChangePassword as onChangePassword,
-  signUpRequest,
-  signUpSuccess,
-  signUpFailure
-} from '../actions/SignUp';
+import SignUpForm from '../components/SignUpForm';
 
-const { Title } = Typography;
+const styles = theme => ({
+  root: {
+    padding: '8em 0 0',
+    '& > div': {
+      width: '32em',
+      height: '38em',
+      margin: 'auto',
+      padding: '4em 6em',
+      backgroundColor: 'white',
+      border: '1px solid #dddddd',
+      borderRadius: '5px',
+      textAlign: 'center'
+    }
+  }
+});
 
 const SignUp = ({
-  history,
-  email,
-  password,
-  isLoading,
-  onChangeEmail,
-  onChangePassword,
-  signUp
-}) => !Meteor.userId() ? (
-  <div id="sign-up">
-    <div>
-      <Title>toodlist</Title>
+  classes
+}) => {
+  if (Meteor.userId()) {
+    return <Redirect to="/" />
+  }
+
+  return (
+    <div id="sign-up" className={classes.root}>
       <div>
-        <Input
-          placeholder="Email"
-          prefix={<Icon type="mail" />}
-          value={email}
-          onChange={e => onChangeEmail(e.target.value)}
-          onPressEnter={() => signUp(email, password, history)}
-        />
-        <Input.Password
-          placeholder="Password"
-          prefix={<Icon type="lock" />}
-          value={password}
-          onChange={e => onChangePassword(e.target.value)}
-          onPressEnter={() => signUp(email, password, history)}
-        />
-        <Button
-          loading={isLoading}
-          type="primary"
-          block
-          onClick={() => signUp(email, password, history)}
-        >
-          Create Account
-        </Button>
+        <Typography.Title>toodlist</Typography.Title>
+        <SignUpForm />
+        <Link to="/">
+          I already have an account!
+        </Link>
       </div>
-      <Link to="/">
-        I already have an account!
-      </Link>
     </div>
-  </div>
-) : <Redirect to="/" />;
-
-const mapStateToProps = state => {
-  return {
-    email: state.signUp.email,
-    password: state.signUp.password,
-    isLoading: state.signUp.isLoading
-  };
+  );
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onChangeEmail: email => dispatch(onChangeEmail(email)),
-    onChangePassword: password => dispatch(onChangePassword(password)),
-    signUp: (email, password, history) => {
-      if (!email || !password) {
-        return notification.error({
-          message: 'Your request failed to complete.',
-          description: 'Email and password cannot be blank.'
-        });
-      }
-      if (!email.includes('@')) {
-        return notification.error({
-          message: 'Your request failed to complete.',
-          description: 'Email is invalid.'
-        });
-      }
-      if (password.length < 6) {
-        return notification.error({
-          message: 'Your request failed to complete.',
-          description: 'Password must be at least 6 characters.'
-        });
-      }
-      dispatch(signUpRequest());
-      Accounts.createUser({ email, password }, err => {
-        if (err) {
-          dispatch(signUpFailure());
-          return notification.error({
-            message: 'Your request failed to complete.',
-            description: 'This email already exists.'
-          });
-        } else {
-          dispatch(signUpSuccess());
-          history.push('/');
-        }
-      });
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default withStyles(styles)(SignUp);
