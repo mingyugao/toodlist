@@ -6,16 +6,34 @@ import SignInForm from '../components/SignInForm';
 
 const styles = theme => ({
   root: {
-    padding: '8em 0 0',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+      padding: '3em 0 9em'
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '8em 0 0'
+    },
     '& > div': {
-      width: '32em',
-      height: '38em',
-      margin: 'auto',
-      padding: '4em 6em',
       backgroundColor: 'white',
       border: '1px solid #dddddd',
-      borderRadius: '5px',
-      textAlign: 'center'
+      textAlign: 'center',
+      '& > img': {
+        width: '2rem',
+        margin: '0 0 1em'
+      },
+      [theme.breakpoints.down('sm')]: {
+        height: '100%',
+        margin: '0 2em',
+        padding: '3em 3em',
+        borderRadius: '0.5em'
+      },
+      [theme.breakpoints.up('md')]: {
+        width: '32em',
+        height: '38em',
+        margin: 'auto',
+        padding: '4em 6em',
+        borderRadius: '5px'
+      }
     }
   }
 });
@@ -30,6 +48,7 @@ const SignIn = ({
   return (
     <div id="sign-in" className={classes.root}>
       <div>
+        <img src="/favicon.ico" alt="logo" />
         <Typography.Title>toodlist</Typography.Title>
         <SignInForm />
         Or
