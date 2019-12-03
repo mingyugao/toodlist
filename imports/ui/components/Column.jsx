@@ -202,6 +202,11 @@ class Column extends Component {
                   className={classes.todoContainer}
                   ref={innerProvided.innerRef}
                   {...innerProvided.droppableProps}
+                  onClick={() => {
+                    if (this.state.isTodoInputVisible) {
+                      this.todoInput.blur();
+                    }
+                  }}
                 >
                   {todos.map((todo, index) => (
                     <Todo
