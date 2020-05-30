@@ -1,5 +1,17 @@
 @import 'theme.less';
 
+html,
+body,
+#react-target {
+  min-height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   background-image: url(/background.jpg);
   background-repeat: repeat;
@@ -7,71 +19,74 @@ body {
   background-size: 300px 250px;
 }
 
-#react-target {
-  height: inherit;
-}
-
-#sign-in {
-  & > div > form {
-    margin-bottom: 2em;
-
-    & > div.ant-form-item {
-      margin-bottom: 0.5em;
-      text-align: left;
-    }
-  }
-}
-
-#sign-up {
-  & > div > form {
-    margin-bottom: 2em;
-
-    & > div.ant-form-item {
-      margin-bottom: 0.5em;
-      text-align: left;
-    }
-  }
-}
-
-#forgot-password {
-  & > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -70%);
-
-    background-color: white;
-    border: 1px solid @border-color-xlight;
-    border-radius: 5px;
-    padding: 3rem;
-    text-align: center;
-    width: 32rem;
-    height: 20rem;
-
-    & > div {
-      padding: 1rem 4rem;
-
-      & > span {
-        margin-bottom: 2rem;
-
-        & > span.ant-input-prefix {
-          color: darkgrey;
-        }
-        & > input.ant-input {
-          padding-left: 2rem;
-        }
-      }
-
-      & > i {
-        color: green;
-        font-size: 2rem;
-        margin-top: 0.2rem;
-        margin-bottom: 2.3rem;
-      }
-    }
-  }
-}
-
+/*  */
+/*  */
+/*  */
+/* #react-target { */
+/*   height: inherit; */
+/* } */
+/*  */
+/* #sign-in { */
+/*   & > div > form { */
+/*     margin-bottom: 2em; */
+/*  */
+/*     & > div.ant-form-item { */
+/*       margin-bottom: 0.5em; */
+/*       text-align: left; */
+/*     } */
+/*   } */
+/* } */
+/*  */
+/* #sign-up { */
+/*   & > div > form { */
+/*     margin-bottom: 2em; */
+/*  */
+/*     & > div.ant-form-item { */
+/*       margin-bottom: 0.5em; */
+/*       text-align: left; */
+/*     } */
+/*   } */
+/* } */
+/*  */
+/* #forgot-password { */
+/*   & > div { */
+/*     position: absolute; */
+/*     top: 50%; */
+/*     left: 50%; */
+/*     transform: translate(-50%, -70%); */
+/*  */
+/*     background-color: white; */
+/*     border: 1px solid @border-color-xlight; */
+/*     border-radius: 5px; */
+/*     padding: 3rem; */
+/*     text-align: center; */
+/*     width: 32rem; */
+/*     height: 20rem; */
+/*  */
+/*     & > div { */
+/*       padding: 1rem 4rem; */
+/*  */
+/*       & > span { */
+/*         margin-bottom: 2rem; */
+/*  */
+/*         & > span.ant-input-prefix { */
+/*           color: darkgrey; */
+/*         } */
+/*         & > input.ant-input { */
+/*           padding-left: 2rem; */
+/*         } */
+/*       } */
+/*  */
+/*       & > i { */
+/*         color: green; */
+/*         font-size: 2rem; */
+/*         margin-top: 0.2rem; */
+/*         margin-bottom: 2.3rem; */
+/*       } */
+/*     } */
+/*   } */
+/* } */
+/*  */
 #home {
   & > div:nth-of-type(2) {
     & > div > div {
