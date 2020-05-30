@@ -13,7 +13,7 @@ import {
   todoDeleteFailure
 } from '../actions/Todo';
 
-class Todo extends Component {
+class Tood extends Component {
   state = { isBeingEdited: false };
 
   componentDidUpdate = (_, prevState) => {
@@ -123,4 +123,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Todo);
+export default connect(mapStateToProps, mapDispatchToProps)(Tood);
