@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Typography from 'antd/lib/typography';
 import SignUpForm from '../components/SignUpForm';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     [theme.breakpoints.down('sm')]: {
       height: '100%',
@@ -38,11 +38,9 @@ const styles = theme => ({
   }
 });
 
-const SignUp = ({
-  classes
-}) => {
+const SignUp = ({ classes }) => {
   if (Meteor.userId()) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
 
   return (
@@ -51,9 +49,7 @@ const SignUp = ({
         <img src="/favicon.ico" alt="logo" />
         <Typography.Title>toodlist</Typography.Title>
         <SignUpForm />
-        <Link to="/">
-          I already have an account!
-        </Link>
+        <Link to="/">I already have an account!</Link>
       </div>
     </div>
   );

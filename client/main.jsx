@@ -3,10 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import {
-  createMuiTheme,
-  MuiThemeProvider
-} from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import reducers from '/imports/ui/reducers';
 import AppRouter from '/imports/startup/client/AppRouter';
 

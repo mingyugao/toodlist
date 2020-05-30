@@ -1,4 +1,4 @@
-export const todoEditRequest = newTodo => {
+export const todoEditRequest = (newTodo) => {
   return {
     type: 'TODO_EDIT_REQUEST',
     payload: newTodo
@@ -17,7 +17,7 @@ export const todoEditFailure = () => {
   };
 };
 
-export const todoDeleteRequest = tid => {
+export const todoDeleteRequest = (tid) => {
   return {
     type: 'TODO_DELETE_REQUEST',
     payload: tid

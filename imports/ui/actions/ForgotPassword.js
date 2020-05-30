@@ -1,4 +1,4 @@
-export const forgotPasswordOnChangeEmail = email => {
+export const forgotPasswordOnChangeEmail = (email) => {
   return {
     type: 'FORGOT_PASSWORD_ON_CHANGE_EMAIL',
     payload: email

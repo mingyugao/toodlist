@@ -10,7 +10,7 @@ export const homeGetUserDataRequest = () => {
   };
 };
 
-export const homeGetUserDataSuccess = data => {
+export const homeGetUserDataSuccess = (data) => {
   return {
     type: 'HOME_GET_USER_DATA_SUCCESS',
     payload: data
@@ -23,7 +23,7 @@ export const homeGetUserDataFailure = () => {
   };
 };
 
-export const homeDragAndDropRequest = result => {
+export const homeDragAndDropRequest = (result) => {
   return {
     type: 'HOME_DRAG_AND_DROP_REQUEST',
     payload: result
@@ -42,7 +42,7 @@ export const homeDragAndDropFailure = () => {
   };
 };
 
-export const homeCreateTodolistRequest = column => {
+export const homeCreateTodolistRequest = (column) => {
   return {
     type: 'HOME_CREATE_TODOLIST_REQUEST',
     payload: column

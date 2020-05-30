@@ -22,39 +22,42 @@ const ForgotPassword = ({
   isSent,
   onChangeEmail,
   sendPasswordResetLink
-}) => !Meteor.userId() ? (
-  <div id="forgot-password">
-    <div>
-      <Title>Reset Password</Title>
-      {!isSent && (
-        <div>
-          <Input
-            defaultValue={defaultEmail}
-            prefix={<Icon type="mail" />}
-            placeholder="Email"
-            onChange={e => onChangeEmail(e.target.value)}
-            onPressEnter={() => sendPasswordResetLink(email)}
-          />
-          <Button
-            loading={isLoading}
-            type="primary"
-            onClick={() => sendPasswordResetLink(email)}
-          >
-            Send Password Reset Link
-          </Button>
-        </div>
-      )}
-      {isSent && (
-        <div>
-          <Icon type="check-circle" />
-          <Paragraph>Link sent!</Paragraph>
-        </div>
-      )}
+}) =>
+  !Meteor.userId() ? (
+    <div id="forgot-password">
+      <div>
+        <Title>Reset Password</Title>
+        {!isSent && (
+          <div>
+            <Input
+              defaultValue={defaultEmail}
+              prefix={<Icon type="mail" />}
+              placeholder="Email"
+              onChange={(e) => onChangeEmail(e.target.value)}
+              onPressEnter={() => sendPasswordResetLink(email)}
+            />
+            <Button
+              loading={isLoading}
+              type="primary"
+              onClick={() => sendPasswordResetLink(email)}
+            >
+              Send Password Reset Link
+            </Button>
+          </div>
+        )}
+        {isSent && (
+          <div>
+            <Icon type="check-circle" />
+            <Paragraph>Link sent!</Paragraph>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-) : <Redirect to="/" />;
+  ) : (
+    <Redirect to="/" />
+  );
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     defaultEmail: state.signIn.email,
     email: state.forgotPassword.email,
@@ -63,14 +66,12 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onChangeEmail: email => dispatch(onChangeEmail(email)),
-    sendPasswordResetLink: email => {
+    onChangeEmail: (email) => dispatch(onChangeEmail(email)),
+    sendPasswordResetLink: (email) => {
       // TODO
-      return message.error(
-        'Sorry, this feature is not implemented yet :('
-      );
+      return message.error('Sorry, this feature is not implemented yet :(');
       // dispatch(forgotPasswordSendLinkRequest());
       // Meteor.call('sendPasswordResetLink', email, err => {
       //   if (err) {

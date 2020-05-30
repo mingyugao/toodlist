@@ -7,10 +7,7 @@ import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
 import Menu from 'antd/lib/menu';
 import message from 'antd/lib/message';
-import {
-  DragDropContext,
-  Droppable
-} from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Column from '../components/Column';
 import Loading from '../components/Loading';
 import Settings from '../components/Settings';
@@ -28,7 +25,7 @@ import {
 } from '../actions/Home';
 import { openSettings } from '../actions/Settings';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: 'flex',
     width: '100vw',
@@ -133,34 +130,23 @@ function Home({
   }, []);
 
   const isMobile = () => {
-    return useMediaQuery(theme => theme.breakpoints.down('sm'));
+    return useMediaQuery((theme) => theme.breakpoints.down('sm'));
   };
 
   const avatarMenu = (
     <Menu>
-      <Menu.Item disabled>
-        {email}
-      </Menu.Item>
+      <Menu.Item disabled>{email}</Menu.Item>
       <Menu.Divider />
-      <Menu.Item onClick={() => openSettings(history)}>
-        Settings
-      </Menu.Item>
-      <Menu.Item onClick={() => signOut(history)}>
-        Log out
-      </Menu.Item>
+      <Menu.Item onClick={() => openSettings(history)}>Settings</Menu.Item>
+      <Menu.Item onClick={() => signOut(history)}>Log out</Menu.Item>
     </Menu>
   );
 
   const renderedColumns = columnOrder.map((cid, index) => {
     const column = columns[cid];
-    const theseTodos = column.todoIds.map(tid => todos[tid]);
+    const theseTodos = column.todoIds.map((tid) => todos[tid]);
     return (
-      <Column
-        key={cid}
-        index={index}
-        column={column}
-        todos={theseTodos}
-      />
+      <Column key={cid} index={index} column={column} todos={theseTodos} />
     );
   });
 
@@ -176,28 +162,19 @@ function Home({
           overlayClassName="home-avatar-dropdown"
           trigger={['click']}
         >
-          <Avatar
-            icon="user"
-            size="large"
-            src={avatarSrc || ''}
-          />
+          <Avatar icon="user" size="large" src={avatarSrc || ''} />
         </Dropdown>
         <h1>toodlist</h1>
       </div>
       <div className={classes.listContainer}>
-        <DragDropContext
-          onDragEnd={result => onDragEnd(result)}
-        >
+        <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
           <Droppable
             droppableId="main-droppable-container"
             direction={isMobile() ? 'vertical' : 'horizontal'}
             type="column"
           >
-            {mainProvided => (
-              <div
-                ref={mainProvided.innerRef}
-                {...mainProvided.droppableProps}
-              >
+            {(mainProvided) => (
+              <div ref={mainProvided.innerRef} {...mainProvided.droppableProps}>
                 {renderedColumns}
                 {mainProvided.placeholder}
               </div>
@@ -207,17 +184,18 @@ function Home({
             className={classes.columnAddPlaceholder}
             onClick={() => createTodolist()}
           >
-            <Icon type="plus" />&nbsp;new toodlist
+            <Icon type="plus" />
+            &nbsp;new toodlist
           </div>
         </DragDropContext>
       </div>
       <Settings />
-      {isLoading && (<Loading />)}
+      {isLoading && <Loading />}
     </div>
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isLoading: state.home.isLoading,
     email: state.home.email,
@@ -229,57 +207,48 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    getUserData: history => {
+    getUserData: (history) => {
       dispatch(homeGetUserDataRequest());
-      Meteor.call(
-        'getUserData',
-        Meteor.userId(),
-        (err, response) => {
-          if (err) {
-            dispatch(homeGetUserDataFailure());
-            history.push('/');
-          } else {
-            dispatch(homeGetUserDataSuccess({
+      Meteor.call('getUserData', Meteor.userId(), (err, response) => {
+        if (err) {
+          dispatch(homeGetUserDataFailure());
+          history.push('/');
+        } else {
+          dispatch(
+            homeGetUserDataSuccess({
               email: response.emails[0].address,
               avatarSrc: response.avatarSrc,
               todos: response.todos,
               columns: response.columns,
               columnOrder: response.columnOrder
-            }));
-          }
+            })
+          );
         }
-      );
+      });
     },
     openSettings: () => {
       dispatch(openSettings());
     },
-    signOut: history => {
-      Meteor.logout(err => {
+    signOut: (history) => {
+      Meteor.logout((err) => {
         dispatch(homeSignOut());
         history.push('/');
       });
     },
-    onDragEnd: result => {
+    onDragEnd: (result) => {
       const { reason, destination } = result;
       if (reason !== 'CANCEL' && destination) {
         dispatch(homeDragAndDropRequest(result));
-        Meteor.call(
-          'dragAndDrop',
-          Meteor.userId(),
-          result,
-          (err, response) => {
-            if (err) {
-              dispatch(homeDragAndDropFailure());
-              message.error(
-                'Your request failed to complete, please try again.'
-              );
-            } else {
-              dispatch(homeDragAndDropSuccess());
-            }
+        Meteor.call('dragAndDrop', Meteor.userId(), result, (err, response) => {
+          if (err) {
+            dispatch(homeDragAndDropFailure());
+            message.error('Your request failed to complete, please try again.');
+          } else {
+            dispatch(homeDragAndDropSuccess());
           }
-        );
+        });
       }
     },
     createTodolist: () => {
@@ -297,9 +266,7 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(homeCreateTodolistFailure());
-            message.error(
-              'Your request failed to complete, please try again.'
-            );
+            message.error('Your request failed to complete, please try again.');
           } else {
             dispatch(homeCreateTodolistSuccess());
           }

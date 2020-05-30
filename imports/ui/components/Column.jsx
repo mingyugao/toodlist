@@ -7,10 +7,7 @@ import Input from 'antd/lib/input';
 import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
 import message from 'antd/lib/message';
-import {
-  Droppable,
-  Draggable
-} from 'react-beautiful-dnd';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Todo from './Todo';
 import {
   columnUpdateTitleRequest,
@@ -24,7 +21,7 @@ import {
   columnCreateTodoFailure
 } from '../actions/Column';
 
-const styles = theme => ({
+const styles = (theme) => ({
   column: {
     border: '1px solid #dddddd',
     borderRadius: '5px',
@@ -59,18 +56,18 @@ class Column extends Component {
   componentDidMount = () => {
     const column = document.getElementById(this.props.column.id);
     if (column.animate) {
-      column.animate({
-        opacity: [0, 1],
-        transform: ['scale(0.8)', 'scale(1)']
-      }, 200);
+      column.animate(
+        {
+          opacity: [0, 1],
+          transform: ['scale(0.8)', 'scale(1)']
+        },
+        200
+      );
     }
   };
 
   componentDidUpdate = (_, prev) => {
-    const {
-      isTitleInputVisible,
-      isTodoInputVisible
-    } = this.state;
+    const { isTitleInputVisible, isTodoInputVisible } = this.state;
 
     if (!prev.isTitleInputVisible && isTitleInputVisible) {
       this.titleInput.focus();
@@ -79,9 +76,9 @@ class Column extends Component {
     }
   };
 
-  saveTitleRef = ref => (this.titleInput = ref);
+  saveTitleRef = (ref) => (this.titleInput = ref);
 
-  saveTodoRef = ref => (this.todoInput = ref);
+  saveTodoRef = (ref) => (this.todoInput = ref);
 
   toggleEditTitle = () => {
     this.setState({ isTitleInputVisible: true });
@@ -91,11 +88,8 @@ class Column extends Component {
     this.setState({ isTodoInputVisible: true });
   };
 
-  updateTitle = e => {
-    this.props.updateTitle(
-      this.props.column.id,
-      e.target.value
-    );
+  updateTitle = (e) => {
+    this.props.updateTitle(this.props.column.id, e.target.value);
     this.setState({ isTitleInputVisible: false });
   };
 
@@ -103,10 +97,13 @@ class Column extends Component {
     const cid = this.props.column.id;
     const column = document.getElementById(cid);
     if (column.animate) {
-      const anim = column.animate({
-        opacity: [1, 0],
-        transform: ['scale(1)', 'scale(0)']
-      }, 200);
+      const anim = column.animate(
+        {
+          opacity: [1, 0],
+          transform: ['scale(1)', 'scale(0)']
+        },
+        200
+      );
       anim.onfinish = () => {
         this.props.deleteTodolist(cid);
       };
@@ -115,37 +112,23 @@ class Column extends Component {
     }
   };
 
-  createTodo = e => {
-    this.props.createTodo(
-      this.props.column.id,
-      e.target.value
-    );
+  createTodo = (e) => {
+    this.props.createTodo(this.props.column.id, e.target.value);
     this.setState({ isTodoInputVisible: false });
   };
 
-  createTodoAndFocusInput = e => {
-    this.props.createTodo(
-      this.props.column.id,
-      e.target.value
-    );
-    this.todoInput.state.value = "";
+  createTodoAndFocusInput = (e) => {
+    this.props.createTodo(this.props.column.id, e.target.value);
+    this.todoInput.state.value = '';
     this.todoInput.focus();
   };
 
   render() {
-    const {
-      classes,
-      index,
-      column,
-      todos
-    } = this.props;
+    const { classes, index, column, todos } = this.props;
 
     return (
-      <Draggable
-        draggableId={column.id}
-        index={index}
-      >
-        {columnProvided => (
+      <Draggable draggableId={column.id} index={index}>
+        {(columnProvided) => (
           <div
             className={`${column.color || 'white'} ${classes.column}`}
             id={column.id}
@@ -155,10 +138,7 @@ class Column extends Component {
           >
             <div>
               {!this.state.isTitleInputVisible && (
-                <Typography.Title
-                  level={4}
-                  onClick={this.toggleEditTitle}
-                >
+                <Typography.Title level={4} onClick={this.toggleEditTitle}>
                   {column.title}
                 </Typography.Title>
               )}
@@ -197,7 +177,7 @@ class Column extends Component {
               )}
             </div>
             <Droppable droppableId={column.id} type="todo">
-              {innerProvided => (
+              {(innerProvided) => (
                 <div
                   className={classes.todoContainer}
                   ref={innerProvided.innerRef}
@@ -209,11 +189,7 @@ class Column extends Component {
                   }}
                 >
                   {todos.map((todo, index) => (
-                    <Todo
-                      key={todo.id}
-                      index={index}
-                      todo={todo}
-                    />
+                    <Todo key={todo.id} index={index} todo={todo} />
                   ))}
                   {innerProvided.placeholder}
                   {!this.state.isTodoInputVisible && (
@@ -221,7 +197,8 @@ class Column extends Component {
                       className="todo todo-add-placeholder"
                       onClick={this.toggleNewTodo}
                     >
-                      <Icon type="plus" />&nbsp;new item
+                      <Icon type="plus" />
+                      &nbsp;new item
                     </div>
                   )}
                   {this.state.isTodoInputVisible && (
@@ -243,11 +220,11 @@ class Column extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateTitle: (cid, title) => {
       if (title) {
@@ -270,23 +247,16 @@ const mapDispatchToProps = dispatch => {
         );
       }
     },
-    deleteTodolist: cid => {
+    deleteTodolist: (cid) => {
       dispatch(columnDeleteTodolistRequest(cid));
-      Meteor.call(
-        'deleteTodolist',
-        Meteor.userId(),
-        cid,
-        (err, response) => {
-          if (err) {
-            dispatch(columnDeleteTodolistFailure());
-            message.error(
-              'Your request failed to complete, please try again.'
-            );
-          } else {
-            dispatch(columnDeleteTodolistSuccess());
-          }
+      Meteor.call('deleteTodolist', Meteor.userId(), cid, (err, response) => {
+        if (err) {
+          dispatch(columnDeleteTodolistFailure());
+          message.error('Your request failed to complete, please try again.');
+        } else {
+          dispatch(columnDeleteTodolistSuccess());
         }
-      );
+      });
     },
     createTodo: (cid, todoContent) => {
       if (todoContent) {

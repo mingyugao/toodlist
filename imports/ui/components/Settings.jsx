@@ -25,7 +25,7 @@ import {
   settingsUpdateColumnColorFailure
 } from '../actions/Settings';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     [theme.breakpoints.down('sm')]: {
       height: '85%',
@@ -34,16 +34,16 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: '55% !important',
       height: '100%',
-      paddingTop: '24px',
+      paddingTop: '24px'
     },
     '& div.ant-modal-body': {
       flexGrow: '1',
       overflow: 'scroll',
       [theme.breakpoints.down('sm')]: {
-        padding: '1rem 8% 3rem',
+        padding: '1rem 8% 3rem'
       },
       [theme.breakpoints.up('md')]: {
-        padding: '1rem 16% 3rem',
+        padding: '1rem 16% 3rem'
       }
     }
   }
@@ -74,7 +74,7 @@ const Settings = ({
   updateEmail,
   onChangeAvatarSrc,
   updateAvatarSrc,
-  updateColumnColor,
+  updateColumnColor
 }) => (
   <Modal
     className={classes.root}
@@ -89,20 +89,14 @@ const Settings = ({
     <div>
       <Typography.Title level={4}>Avatar</Typography.Title>
       <div>
-        <Avatar
-          icon="user"
-          size="large"
-          src={avatarSrc || ''}
-        />
+        <Avatar icon="user" size="large" src={avatarSrc || ''} />
         <div>
           <Input
             defaultValue={avatarSrc}
             placeholder="Enter image URL"
-            onChange={e => onChangeAvatarSrc(e.target.value)}
+            onChange={(e) => onChangeAvatarSrc(e.target.value)}
           />
-          <Button
-            onClick={() => updateAvatarSrc(avatarSrcInput)}
-          >
+          <Button onClick={() => updateAvatarSrc(avatarSrcInput)}>
             Update
           </Button>
         </div>
@@ -111,9 +105,7 @@ const Settings = ({
     <Divider />
     <div>
       <Typography.Title level={4}>Toodlist Colors</Typography.Title>
-      {columnOrder.length === 0 && (
-        <span>You don't have any toodlists.</span>
-      )}
+      {columnOrder.length === 0 && <span>You don't have any toodlists.</span>}
       {columnOrder.map((cid, index) => {
         const column = columns[cid];
         return (
@@ -122,7 +114,7 @@ const Settings = ({
             <Radio.Group
               options={backgroundOptions}
               value={column.color || 'white'}
-              onChange={e => updateColumnColor(column.id, e.target.value)}
+              onChange={(e) => updateColumnColor(column.id, e.target.value)}
             />
           </div>
         );
@@ -134,9 +126,11 @@ const Settings = ({
       <Input
         disabled
         defaultValue={email}
-        onChange={e => onChangeEmail(e.target.value)}
+        onChange={(e) => onChangeEmail(e.target.value)}
       />
-      <Button disabled onClick={() => updateEmail(emailInput)}>Update</Button>
+      <Button disabled onClick={() => updateEmail(emailInput)}>
+        Update
+      </Button>
     </div>
     <Divider />
     <div>
@@ -147,12 +141,14 @@ const Settings = ({
       <Input.Password disabled value="" />
       <div>Confirm New Password</div>
       <Input.Password disabled value="" />
-      <div><Button disabled>Update</Button></div>
+      <div>
+        <Button disabled>Update</Button>
+      </div>
     </div>
   </Modal>
 );
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     visible: state.settings.visible,
     emailInput: state.settings.email,
@@ -164,21 +160,21 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     closeSettings: () => {
       dispatch(closeSettings());
     },
-    onChangeEmail: email => {
+    onChangeEmail: (email) => {
       dispatch(settingsOnChangeEmail(email));
     },
-    updateEmail: email => {
+    updateEmail: (email) => {
       // TODO
     },
-    onChangeAvatarSrc: avatarSrc => {
+    onChangeAvatarSrc: (avatarSrc) => {
       dispatch(settingsOnChangeAvatarSrc(avatarSrc));
     },
-    updateAvatarSrc: avatarSrc => {
+    updateAvatarSrc: (avatarSrc) => {
       dispatch(settingsUpdateAvatarSrcRequest(avatarSrc));
       Meteor.call(
         'updateAvatarSrc',
@@ -187,9 +183,7 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(settingsUpdateAvatarSrcFailure());
-            message.error(
-              'Your request failed to complete, please try again.'
-            );
+            message.error('Your request failed to complete, please try again.');
           } else {
             dispatch(settingsUpdateAvatarSrcSuccess());
           }
@@ -206,9 +200,7 @@ const mapDispatchToProps = dispatch => {
         (err, response) => {
           if (err) {
             dispatch(settingsUpdateColumnColorFailure());
-            message.error(
-              'Your request failed to complete, please try again.'
-            );
+            message.error('Your request failed to complete, please try again.');
           } else {
             dispatch(settingsUpdateColumnColorSuccess());
           }

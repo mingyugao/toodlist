@@ -17,7 +17,7 @@ export const columnUpdateTitleFailure = () => {
   };
 };
 
-export const columnDeleteTodolistRequest = cid => {
+export const columnDeleteTodolistRequest = (cid) => {
   return {
     type: 'COLUMN_DELETE_TODOLIST_REQUEST',
     payload: cid
@@ -40,17 +40,17 @@ export const columnCreateTodoRequest = (cid, newTodo) => {
   return {
     type: 'COLUMN_CREATE_TODO_REQUEST',
     payload: { cid, newTodo }
-  }
+  };
 };
 
 export const columnCreateTodoSuccess = () => {
   return {
     type: 'COLUMN_CREATE_TODO_SUCCESS'
-  }
+  };
 };
 
 export const columnCreateTodoFailure = () => {
   return {
     type: 'COLUMN_CREATE_TODO_FAILURE'
-  }
+  };
 };

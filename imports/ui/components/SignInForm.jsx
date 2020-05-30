@@ -6,21 +6,12 @@ import Form from 'antd/lib/form';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import message from 'antd/lib/message';
-import {
-  signInRequest,
-  signInSuccess,
-  signInFailure
-} from '../actions/SignIn';
+import { signInRequest, signInSuccess, signInFailure } from '../actions/SignIn';
 
-const SignInForm = Form.create({})(({
-  form,
-  history,
-  isLoading,
-  signIn
-}) => {
+const SignInForm = Form.create({})(({ form, history, isLoading, signIn }) => {
   const { getFieldDecorator } = form;
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     form.validateFields((err, { email, password }) => {
       if (!err) {
@@ -30,7 +21,7 @@ const SignInForm = Form.create({})(({
   };
 
   return (
-    <Form onSubmit={e => handleSubmit(e)}>
+    <Form onSubmit={(e) => handleSubmit(e)}>
       <Form.Item>
         {getFieldDecorator('email', {
           rules: [
@@ -43,19 +34,16 @@ const SignInForm = Form.create({})(({
               message: 'Email is not valid.'
             }
           ]
-        })(
-          <Input
-            placeholder="Email"
-            prefix={<Icon type="mail" />}
-          />
-        )}
+        })(<Input placeholder="Email" prefix={<Icon type="mail" />} />)}
       </Form.Item>
       <Form.Item>
         {getFieldDecorator('password', {
-          rules: [{
-            required: true,
-            message: 'Please enter your password.'
-          }]
+          rules: [
+            {
+              required: true,
+              message: 'Please enter your password.'
+            }
+          ]
         })(
           <Input.Password
             placeholder="Password"
@@ -64,15 +52,8 @@ const SignInForm = Form.create({})(({
         )}
       </Form.Item>
       <Form.Item>
-        <Link to="/forgot_password">
-          Forgot password?
-        </Link>
-        <Button
-          loading={isLoading}
-          type="primary"
-          htmlType="submit"
-          block
-        >
+        <Link to="/forgot_password">Forgot password?</Link>
+        <Button loading={isLoading} type="primary" htmlType="submit" block>
           Log In
         </Button>
       </Form.Item>
@@ -80,17 +61,17 @@ const SignInForm = Form.create({})(({
   );
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isLoading: state.signIn.isLoading
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     signIn: (email, password, history) => {
       dispatch(signInRequest());
-      Meteor.loginWithPassword({ email }, password, err => {
+      Meteor.loginWithPassword({ email }, password, (err) => {
         if (err) {
           dispatch(signInFailure());
           return message.error('Email or password is incorrect.');

@@ -6,21 +6,12 @@ import Form from 'antd/lib/form';
 import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import message from 'antd/lib/message';
-import {
-  signUpRequest,
-  signUpSuccess,
-  signUpFailure
-} from '../actions/SignUp';
+import { signUpRequest, signUpSuccess, signUpFailure } from '../actions/SignUp';
 
-const SignUpForm = Form.create({})(({
-  form,
-  history,
-  isLoading,
-  signUp
-}) => {
+const SignUpForm = Form.create({})(({ form, history, isLoading, signUp }) => {
   const { getFieldDecorator } = form;
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     form.validateFields((err, { email, password }) => {
       if (!err) {
@@ -30,7 +21,7 @@ const SignUpForm = Form.create({})(({
   };
 
   return (
-    <Form onSubmit={e => handleSubmit(e)}>
+    <Form onSubmit={(e) => handleSubmit(e)}>
       <Form.Item>
         {getFieldDecorator('email', {
           rules: [
@@ -43,12 +34,7 @@ const SignUpForm = Form.create({})(({
               message: 'Email is not valid.'
             }
           ]
-        })(
-          <Input
-            placeholder="Email"
-            prefix={<Icon type="mail" />}
-          />
-        )}
+        })(<Input placeholder="Email" prefix={<Icon type="mail" />} />)}
       </Form.Item>
       <Form.Item>
         {getFieldDecorator('password', {
@@ -70,12 +56,7 @@ const SignUpForm = Form.create({})(({
         )}
       </Form.Item>
       <Form.Item>
-        <Button
-          loading={isLoading}
-          type="primary"
-          htmlType="submit"
-          block
-        >
+        <Button loading={isLoading} type="primary" htmlType="submit" block>
           Create Account
         </Button>
       </Form.Item>
@@ -83,17 +64,17 @@ const SignUpForm = Form.create({})(({
   );
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isLoading: state.signUp.isLoading
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     signUp: (email, password, history) => {
       dispatch(signUpRequest());
-      Accounts.createUser({ email, password }, err => {
+      Accounts.createUser({ email, password }, (err) => {
         if (err) {
           dispatch(signUpFailure());
           return message.error('This email has already been registered.');

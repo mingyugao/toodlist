@@ -1,5 +1,5 @@
 Meteor.methods({
-  getUserData: userId => {
+  getUserData: (userId) => {
     if (!userId) throw new Error();
     const user = Meteor.users.findOne(userId);
     if (user.todos === undefined) {
@@ -40,7 +40,7 @@ Meteor.methods({
             ...user.columns,
             [newColumn.id]: newColumn
           },
-          columnOrder: [ ...user.columnOrder, newColumn.id ]
+          columnOrder: [...user.columnOrder, newColumn.id]
         }
       });
     } catch (e) {
@@ -83,10 +83,10 @@ Meteor.methods({
   deleteTodolist: (userId, cid) => {
     const user = Meteor.users.findOne(userId);
 
-    const todoIdsToDelete = [ ...user.columns[cid].todoIds ];
+    const todoIdsToDelete = [...user.columns[cid].todoIds];
     const newTodos = { ...user.todos };
-    Object.keys(newTodos).forEach(tid => {
-      if (todoIdsToDelete.map(tid => tid.toString()).includes(tid)) {
+    Object.keys(newTodos).forEach((tid) => {
+      if (todoIdsToDelete.map((tid) => tid.toString()).includes(tid)) {
         delete newTodos[tid];
       }
     });
@@ -94,7 +94,7 @@ Meteor.methods({
     const newColumns = { ...user.columns };
     delete newColumns[cid];
 
-    const newColumnOrder = user.columnOrder.filter(c => c !== cid);
+    const newColumnOrder = user.columnOrder.filter((c) => c !== cid);
 
     try {
       Meteor.users.update(userId, {
@@ -152,15 +152,13 @@ Meteor.methods({
     const user = Meteor.users.findOne(userId);
 
     const newTodos = { ...user.todos };
-    delete newTodos[tid]
+    delete newTodos[tid];
     const newColumns = { ...user.columns };
 
-    Object.keys(newColumns).forEach(cid => {
-      newColumns[cid].todoIds = newColumns[cid]
-        .todoIds
-        .filter(id => {
-          return id !== tid;
-        });
+    Object.keys(newColumns).forEach((cid) => {
+      newColumns[cid].todoIds = newColumns[cid].todoIds.filter((id) => {
+        return id !== tid;
+      });
     });
 
     try {
@@ -178,15 +176,10 @@ Meteor.methods({
   dragAndDrop: (userId, result) => {
     const user = Meteor.users.findOne(userId);
 
-    const {
-      draggableId,
-      source,
-      destination,
-      type
-    } = result;
+    const { draggableId, source, destination, type } = result;
 
     if (type === 'column') {
-      const newColumnOrder = [ ...user.columnOrder ];
+      const newColumnOrder = [...user.columnOrder];
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
 
@@ -202,14 +195,15 @@ Meteor.methods({
       }
     } else {
       const sourceColumn = user.columns[source.droppableId];
-      const newSourceTodoIds = [ ...sourceColumn.todoIds ];
+      const newSourceTodoIds = [...sourceColumn.todoIds];
       newSourceTodoIds.splice(source.index, 1);
       const newSourceColumn = { ...sourceColumn, todoIds: newSourceTodoIds };
 
       const destinationColumn = user.columns[destination.droppableId];
-      const newDestinationTodoIds = source.droppableId === destination.droppableId
-        ? newSourceTodoIds
-        : [ ...destinationColumn.todoIds ];
+      const newDestinationTodoIds =
+        source.droppableId === destination.droppableId
+          ? newSourceTodoIds
+          : [...destinationColumn.todoIds];
       newDestinationTodoIds.splice(destination.index, 0, draggableId);
       const newDestinationColumn = {
         ...destinationColumn,
@@ -232,7 +226,7 @@ Meteor.methods({
       }
     }
   },
-  sendPasswordResetLink: email => {
+  sendPasswordResetLink: (email) => {
     const user = Accounts.findUserByEmail(email);
     if (user) {
       Accounts.sendResetPasswordEmail(user._id);
