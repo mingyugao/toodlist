@@ -6,14 +6,26 @@ import Logo from './Logo';
 
 const styles = (theme) => ({
   root: {
-    height: '100%',
-    padding: theme.spacing(12, 0)
+    [theme.breakpoints.down('sm')]: {
+      height: `${window.innerHeight}px`,
+      padding: theme.spacing(1)
+    },
+    [theme.breakpoints.up('md')]: {
+      height: '100%',
+      padding: theme.spacing(12, 0)
+    }
   },
   paper: {
-    width: '400px',
-    height: '500px',
-    margin: theme.spacing(0, 'auto'),
-    padding: theme.spacing(4, 8)
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+      padding: theme.spacing(12, 4)
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '400px',
+      height: '500px',
+      margin: theme.spacing(0, 'auto'),
+      padding: theme.spacing(4, 8)
+    }
   }
 });
 
