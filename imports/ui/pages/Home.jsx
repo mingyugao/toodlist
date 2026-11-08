@@ -2,17 +2,13 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Avatar from 'antd/lib/avatar';
-import Dropdown from 'antd/lib/dropdown';
 import Icon from 'antd/lib/icon';
-import Menu from 'antd/lib/menu';
 import message from 'antd/lib/message';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import Column from '../components/Column';
+import ToodList from '../components/ToodList';
 import Loading from '../components/Loading';
 import Settings from '../components/Settings';
 import {
-  homeSignOut,
   homeGetUserDataRequest,
   homeGetUserDataSuccess,
   homeGetUserDataFailure,
@@ -24,6 +20,7 @@ import {
   homeCreateTodolistFailure
 } from '../actions/Home';
 import { openSettings } from '../actions/Settings';
+import { Navbar } from '../components';
 
 const styles = (theme) => ({
   root: {
@@ -36,28 +33,6 @@ const styles = (theme) => ({
     [theme.breakpoints.up('md')]: {
       flexDirection: 'row-reverse',
       justifyContent: 'space-between'
-    }
-  },
-  toolBar: {
-    [theme.breakpoints.down('sm')]: {
-      padding: '0.5rem 1rem 0.5rem',
-      backgroundColor: 'rgba(255,255,255,0.8)',
-      '& > h1': {
-        position: 'absolute',
-        top: '0',
-        left: '50%',
-        transform: 'translate(-50%, 15%)',
-        margin: '0'
-      }
-    },
-    [theme.breakpoints.up('md')]: {
-      padding: '1rem 1rem',
-      '& > span': {
-        cursor: 'pointer'
-      },
-      '& > h1': {
-        display: 'none'
-      }
     }
   },
   listContainer: {
@@ -113,8 +88,6 @@ function Home({
   classes,
   history,
   isLoading,
-  email,
-  avatarSrc,
   todos,
   columns,
   columnOrder,
@@ -133,20 +106,11 @@ function Home({
     return useMediaQuery((theme) => theme.breakpoints.down('sm'));
   };
 
-  const avatarMenu = (
-    <Menu>
-      <Menu.Item disabled>{email}</Menu.Item>
-      <Menu.Divider />
-      <Menu.Item onClick={() => openSettings(history)}>Settings</Menu.Item>
-      <Menu.Item onClick={() => signOut(history)}>Log out</Menu.Item>
-    </Menu>
-  );
-
   const renderedColumns = columnOrder.map((cid, index) => {
     const column = columns[cid];
     const theseTodos = column.todoIds.map((tid) => todos[tid]);
     return (
-      <Column key={cid} index={index} column={column} todos={theseTodos} />
+      <ToodList key={cid} index={index} column={column} todos={theseTodos} />
     );
   });
 
@@ -156,16 +120,7 @@ function Home({
       className={classes.root}
       style={isSettingsOpen ? { filter: 'blur(2px)' } : {}}
     >
-      <div className={classes.toolBar}>
-        <Dropdown
-          overlay={avatarMenu}
-          overlayClassName="home-avatar-dropdown"
-          trigger={['click']}
-        >
-          <Avatar icon="user" size="large" src={avatarSrc || ''} />
-        </Dropdown>
-        <h1>toodlist</h1>
-      </div>
+      <Navbar />
       <div className={classes.listContainer}>
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
           <Droppable
@@ -198,8 +153,6 @@ function Home({
 const mapStateToProps = (state) => {
   return {
     isLoading: state.home.isLoading,
-    email: state.home.email,
-    avatarSrc: state.home.avatarSrc,
     todos: state.home.todos,
     columns: state.home.columns,
     columnOrder: state.home.columnOrder,
@@ -226,15 +179,6 @@ const mapDispatchToProps = (dispatch) => {
             })
           );
         }
-      });
-    },
-    openSettings: () => {
-      dispatch(openSettings());
-    },
-    signOut: (history) => {
-      Meteor.logout((err) => {
-        dispatch(homeSignOut());
-        history.push('/');
       });
     },
     onDragEnd: (result) => {

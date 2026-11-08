@@ -1,16 +1,14 @@
 import { combineReducers } from 'redux';
-import signInReducer from './SignIn';
-import signUpReducer from './SignUp';
-import forgotPasswordReducer from './ForgotPassword';
 import homeReducer from './Home';
 import settingsReducer from './Settings';
+import signInReducer from './SignIn';
+import signUpReducer from './SignUp';
 
 const appReducer = combineReducers({
-  signIn: signInReducer,
-  signUp: signUpReducer,
-  forgotPassword: forgotPasswordReducer,
   home: homeReducer,
-  settings: settingsReducer
+  settings: settingsReducer,
+  signIn: signInReducer,
+  signUp: signUpReducer
 });
 
 const rootReducer = (state, action) => {

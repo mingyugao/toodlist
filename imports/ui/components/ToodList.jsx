@@ -8,7 +8,7 @@ import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
 import message from 'antd/lib/message';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import Todo from './Todo';
+import Tood from './Tood';
 import {
   columnUpdateTitleRequest,
   columnUpdateTitleSuccess,
@@ -47,7 +47,7 @@ const styles = (theme) => ({
   }
 });
 
-class Column extends Component {
+class ToodList extends Component {
   state = {
     isTitleInputVisible: false,
     isTodoInputVisible: false
@@ -189,7 +189,7 @@ class Column extends Component {
                   }}
                 >
                   {todos.map((todo, index) => (
-                    <Todo key={todo.id} index={index} todo={todo} />
+                    <Tood key={todo.id} index={index} todo={todo} />
                   ))}
                   {innerProvided.placeholder}
                   {!this.state.isTodoInputVisible && (
@@ -289,4 +289,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(Column));
+)(withStyles(styles)(ToodList));
