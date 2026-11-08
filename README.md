@@ -2,7 +2,7 @@
 
 A personal todo board with accounts, movable lists and tasks, list colors, and avatars. Runs on Meteor 3.5.4, Node 24, React 18, and MongoDB.
 
-Galaxy address: https://mingyugao-toodlist.sandbox.galaxycloud.app
+Galaxy address: https://toodlist.sandbox.galaxycloud.app
 
 ## Run locally
 
