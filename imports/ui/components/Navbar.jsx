@@ -1,14 +1,18 @@
+import { UserOutlined } from '@ant-design/icons';
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@mui/styles';
 import { Avatar, Dropdown, Menu } from 'antd';
+import message from 'antd/lib/message';
 import { homeSignOut } from '../actions/Home';
 import { openSettings } from '../actions/Settings';
+import { waitForPendingMethods } from '../callMethod';
 
 const styles = (theme) => ({
   root: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       padding: '0.5rem 1rem 0.5rem',
       backgroundColor: 'rgba(255,255,255,0.8)',
       '& > h1': {
@@ -50,7 +54,7 @@ function Navbar({ classes, email, avatarSrc, openSettings, signOut }) {
         overlayClassName="home-avatar-dropdown"
         trigger={['click']}
       >
-        <Avatar icon="user" size="large" src={avatarSrc || ''} />
+        <Avatar icon={<UserOutlined />} size="large" src={avatarSrc || ''} />
       </Dropdown>
       <h1>toodlist</h1>
     </div>
@@ -67,8 +71,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     openSettings: () => dispatch(openSettings()),
-    signOut: (history) => {
+    signOut: async (history) => {
+      await waitForPendingMethods();
       Meteor.logout((err) => {
+        if (err) return message.error('Could not log out. Please try again.');
         dispatch(homeSignOut());
         history.push('/');
       });

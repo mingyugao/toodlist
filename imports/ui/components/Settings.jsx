@@ -1,10 +1,11 @@
+import { callMethod } from '../callMethod';
+import { UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@mui/styles';
 import Avatar from 'antd/lib/avatar';
 import Button from 'antd/lib/button';
 import Divider from 'antd/lib/divider';
-import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import Modal from 'antd/lib/modal';
 import Radio from 'antd/lib/radio';
@@ -27,7 +28,7 @@ import {
 
 const styles = (theme) => ({
   root: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       height: '85%',
       margin: '0'
     },
@@ -39,7 +40,7 @@ const styles = (theme) => ({
     '& div.ant-modal-body': {
       flexGrow: '1',
       overflow: 'scroll',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         padding: '1rem 8% 3rem'
       },
       [theme.breakpoints.up('md')]: {
@@ -89,7 +90,7 @@ const Settings = ({
     <div>
       <Typography.Title level={4}>Avatar</Typography.Title>
       <div>
-        <Avatar icon="user" size="large" src={avatarSrc || ''} />
+        <Avatar icon={<UserOutlined />} size="large" src={avatarSrc || ''} />
         <div>
           <Input
             defaultValue={avatarSrc}
@@ -176,36 +177,25 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateAvatarSrc: (avatarSrc) => {
       dispatch(settingsUpdateAvatarSrcRequest(avatarSrc));
-      Meteor.call(
-        'updateAvatarSrc',
-        Meteor.userId(),
-        avatarSrc,
-        (err, response) => {
-          if (err) {
-            dispatch(settingsUpdateAvatarSrcFailure());
-            message.error('Your request failed to complete, please try again.');
-          } else {
-            dispatch(settingsUpdateAvatarSrcSuccess());
-          }
+      callMethod('updateAvatarSrc', avatarSrc, (err, response) => {
+        if (err) {
+          dispatch(settingsUpdateAvatarSrcFailure());
+          message.error('Your request failed to complete, please try again.');
+        } else {
+          dispatch(settingsUpdateAvatarSrcSuccess());
         }
-      );
+      });
     },
     updateColumnColor: (cid, color) => {
       dispatch(settingsUpdateColumnColorRequest(cid, color));
-      Meteor.call(
-        'updateColor',
-        Meteor.userId(),
-        cid,
-        color,
-        (err, response) => {
-          if (err) {
-            dispatch(settingsUpdateColumnColorFailure());
-            message.error('Your request failed to complete, please try again.');
-          } else {
-            dispatch(settingsUpdateColumnColorSuccess());
-          }
+      callMethod('updateColor', cid, color, (err, response) => {
+        if (err) {
+          dispatch(settingsUpdateColumnColorFailure());
+          message.error('Your request failed to complete, please try again.');
+        } else {
+          dispatch(settingsUpdateColumnColorSuccess());
         }
-      );
+      });
     }
   };
 };

@@ -1,2 +1,12 @@
 .DS_Store
 node_modules/
+.env
+.env.*
+!.env.example
+settings.json
+settings.*.json
+!settings.example.json
+backups/
+build/
+test-results/
+playwright-report/

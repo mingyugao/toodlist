@@ -2,27 +2,41 @@
   "name": "toodlist",
   "private": true,
   "scripts": {
-    "start": "meteor run",
-    "test": "meteor test --once --driver-package meteortesting:mocha",
-    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer",
-    "prettier": "prettier --no-editorconfig -c . || :",
-    "prettier-fix": "prettier --no-editorconfig --write . || :"
+    "start": "sh scripts/meteor.sh run",
+    "test": "node --test tests/unit/*.test.mjs",
+    "test:meteor": "TEST_CLIENT=0 sh scripts/meteor.sh test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 sh scripts/meteor.sh test --full-app --driver-package meteortesting:mocha",
+    "visualize": "sh scripts/meteor.sh --production --extra-packages bundle-visualizer",
+    "prettier": "prettier --no-editorconfig -c .",
+    "prettier-fix": "prettier --no-editorconfig --write .",
+    "deploy": "sh deploy.sh",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "@material-ui/core": "^4.6.1",
-    "@material-ui/styles": "^4.6.0",
-    "antd": "^3.20.3",
-    "bcrypt": "^3.0.6",
-    "indexof": "0.0.1",
-    "meteor-node-stubs": "^0.4.1",
-    "react": "^16.5.0",
-    "react-beautiful-dnd": "^11.0.5",
-    "react-dom": "^16.5.0",
-    "react-redux": "^7.1.0",
-    "react-router-dom": "^5.0.1",
-    "redux": "^4.0.4"
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@hello-pangea/dnd": "18.0.1",
+    "@mui/material": "6.4.12",
+    "@mui/styles": "6.4.8",
+    "antd": "4.24.16",
+    "bcrypt": "^6.0.0",
+    "clsx": "^2.1.1",
+    "history": "4.10.1",
+    "meteor-node-stubs": "^1.2.32",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "5.3.4",
+    "redux": "^5.0.1",
+    "@ant-design/icons": "^5.6.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "@playwright/test": "^1.56.1"
+  },
+  "engines": {
+    "node": ">=24 <25"
   },
   "meteor": {
     "mainModule": {

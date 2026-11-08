@@ -1,11 +1,12 @@
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@mui/styles';
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form';
-import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import message from 'antd/lib/message';
 import { signInRequest, signInSuccess, signInFailure } from '../actions/SignIn';
@@ -22,69 +23,54 @@ const styles = (theme) => ({
   }
 });
 
-const SignInForm = Form.create({})(
-  ({ className, classes, form, isLoading, signIn }) => {
-    const history = useHistory();
-    const { getFieldDecorator } = form;
-
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      form.validateFields((err, { email, password }) => {
-        if (!err) {
-          signIn(email, password, history);
-        }
-      });
-    };
-
-    return (
-      <Form
-        className={clsx(className, classes.root)}
-        onSubmit={(e) => handleSubmit(e)}
+function SignInForm({ className, classes, isLoading, signIn }) {
+  const history = useHistory();
+  return (
+    <Form
+      className={clsx(className, classes.root)}
+      onFinish={({ email, password }) =>
+        signIn(email.trim(), password, history)
+      }
+    >
+      <Form.Item
+        name="email"
+        rules={[
+          { required: true, message: 'Please enter your email.' },
+          { type: 'email', message: 'Email is not valid.' }
+        ]}
       >
-        <Form.Item>
-          {getFieldDecorator('email', {
-            rules: [
-              {
-                required: true,
-                message: 'Please enter your email.'
-              },
-              {
-                type: 'email',
-                message: 'Email is not valid.'
-              }
-            ]
-          })(<Input placeholder="Email" prefix={<Icon type="mail" />} />)}
-        </Form.Item>
-        <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [
-              {
-                required: true,
-                message: 'Please enter your password.'
-              }
-            ]
-          })(
-            <Input.Password
-              placeholder="Password"
-              prefix={<Icon type="lock" />}
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <Button
-            className={classes.submitButton}
-            loading={isLoading}
-            type="primary"
-            htmlType="submit"
-            block
-          >
-            Log In
-          </Button>
-        </Form.Item>
-      </Form>
-    );
-  }
-);
+        <Input
+          aria-label="Email"
+          autoComplete="email"
+          placeholder="Email"
+          prefix={<MailOutlined />}
+        />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[{ required: true, message: 'Please enter your password.' }]}
+      >
+        <Input.Password
+          aria-label="Password"
+          autoComplete="current-password"
+          placeholder="Password"
+          prefix={<LockOutlined />}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button
+          className={classes.submitButton}
+          loading={isLoading}
+          type="primary"
+          htmlType="submit"
+          block
+        >
+          Log In
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+}
 
 const mapStateToProps = (state) => {
   return {

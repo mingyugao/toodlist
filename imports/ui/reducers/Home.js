@@ -111,8 +111,13 @@ const homeReducer = (
       [newTodo.id]: newTodo
     };
 
-    const newColumns = { ...state.columns };
-    newColumns[cid].todoIds.push(newTodo.id);
+    const newColumns = {
+      ...state.columns,
+      [cid]: {
+        ...state.columns[cid],
+        todoIds: [...state.columns[cid].todoIds, newTodo.id]
+      }
+    };
 
     return {
       ...state,
@@ -135,9 +140,10 @@ const homeReducer = (
     const newColumns = { ...state.columns };
 
     Object.keys(newColumns).forEach((cid) => {
-      newColumns[cid].todoIds = newColumns[cid].todoIds.filter((id) => {
-        return id !== tid;
-      });
+      newColumns[cid] = {
+        ...newColumns[cid],
+        todoIds: newColumns[cid].todoIds.filter((id) => id !== tid)
+      };
     });
 
     return {

@@ -1,13 +1,19 @@
+import { callMethod } from '../callMethod';
+import {
+  CloseOutlined,
+  PlusOutlined,
+  WarningOutlined
+} from '@ant-design/icons';
+import { Random } from 'meteor/random';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@mui/styles';
 import Button from 'antd/lib/button';
-import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import Popconfirm from 'antd/lib/popconfirm';
 import Typography from 'antd/lib/typography';
 import message from 'antd/lib/message';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Droppable, Draggable } from '@hello-pangea/dnd';
 import Tood from './Tood';
 import {
   columnUpdateTitleRequest,
@@ -27,7 +33,7 @@ const styles = (theme) => ({
     borderRadius: '5px',
     padding: '0.5rem',
     height: 'fit-content',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       marginBottom: '1rem',
       width: '100%'
     },
@@ -38,7 +44,7 @@ const styles = (theme) => ({
     }
   },
   todoContainer: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       minHeight: '10rem'
     },
     [theme.breakpoints.up('md')]: {
@@ -50,7 +56,8 @@ const styles = (theme) => ({
 class ToodList extends Component {
   state = {
     isTitleInputVisible: false,
-    isTodoInputVisible: false
+    isTodoInputVisible: false,
+    todoInputValue: ''
   };
 
   componentDidMount = () => {
@@ -114,12 +121,12 @@ class ToodList extends Component {
 
   createTodo = (e) => {
     this.props.createTodo(this.props.column.id, e.target.value);
-    this.setState({ isTodoInputVisible: false });
+    this.setState({ isTodoInputVisible: false, todoInputValue: '' });
   };
 
   createTodoAndFocusInput = (e) => {
     this.props.createTodo(this.props.column.id, e.target.value);
-    this.todoInput.state.value = '';
+    this.setState({ todoInputValue: '' });
     this.todoInput.focus();
   };
 
@@ -152,10 +159,10 @@ class ToodList extends Component {
               )}
               {todos.length === 0 && (
                 <Button
-                  icon="close"
+                  icon={<CloseOutlined />}
                   shape="circle"
                   size="small"
-                  type="danger"
+                  danger
                   onClick={this.deleteTodolist}
                 />
               )}
@@ -164,14 +171,14 @@ class ToodList extends Component {
                   placement="bottomRight"
                   okType="danger"
                   title="Delete toodlist?"
-                  icon={<Icon type="warning" />}
+                  icon={<WarningOutlined />}
                   onConfirm={this.deleteTodolist}
                 >
                   <Button
-                    icon="close"
+                    icon={<CloseOutlined />}
                     shape="circle"
                     size="small"
-                    type="danger"
+                    danger
                   />
                 </Popconfirm>
               )}
@@ -197,7 +204,7 @@ class ToodList extends Component {
                       className="todo todo-add-placeholder"
                       onClick={this.toggleNewTodo}
                     >
-                      <Icon type="plus" />
+                      <PlusOutlined />
                       &nbsp;new item
                     </div>
                   )}
@@ -205,7 +212,10 @@ class ToodList extends Component {
                     <Input
                       className="todo todo-add-input"
                       ref={this.saveTodoRef}
-                      defaultValue=""
+                      value={this.state.todoInputValue}
+                      onChange={(e) =>
+                        this.setState({ todoInputValue: e.target.value })
+                      }
                       onBlur={this.createTodo}
                       onPressEnter={this.createTodoAndFocusInput}
                     />
@@ -229,27 +239,19 @@ const mapDispatchToProps = (dispatch) => {
     updateTitle: (cid, title) => {
       if (title) {
         dispatch(columnUpdateTitleRequest(cid, title));
-        Meteor.call(
-          'updateTitle',
-          Meteor.userId(),
-          cid,
-          title,
-          (err, response) => {
-            if (err) {
-              dispatch(columnUpdateTitleFailure());
-              message.error(
-                'Your request failed to complete, please try again.'
-              );
-            } else {
-              dispatch(columnUpdateTitleSuccess());
-            }
+        callMethod('updateTitle', cid, title, (err, response) => {
+          if (err) {
+            dispatch(columnUpdateTitleFailure());
+            message.error('Your request failed to complete, please try again.');
+          } else {
+            dispatch(columnUpdateTitleSuccess());
           }
-        );
+        });
       }
     },
     deleteTodolist: (cid) => {
       dispatch(columnDeleteTodolistRequest(cid));
-      Meteor.call('deleteTodolist', Meteor.userId(), cid, (err, response) => {
+      callMethod('deleteTodolist', cid, (err, response) => {
         if (err) {
           dispatch(columnDeleteTodolistFailure());
           message.error('Your request failed to complete, please try again.');
@@ -261,26 +263,18 @@ const mapDispatchToProps = (dispatch) => {
     createTodo: (cid, todoContent) => {
       if (todoContent) {
         const newTodo = {
-          id: Date.now(),
+          id: Random.id(),
           content: todoContent
         };
         dispatch(columnCreateTodoRequest(cid, newTodo));
-        Meteor.call(
-          'createTodo',
-          Meteor.userId(),
-          cid,
-          newTodo,
-          (err, response) => {
-            if (err) {
-              dispatch(columnCreateTodoFailure());
-              message.error(
-                'Your request failed to complete, please try again.'
-              );
-            } else {
-              dispatch(columnCreateTodoSuccess());
-            }
+        callMethod('createTodo', cid, newTodo, (err, response) => {
+          if (err) {
+            dispatch(columnCreateTodoFailure());
+            message.error('Your request failed to complete, please try again.');
+          } else {
+            dispatch(columnCreateTodoSuccess());
           }
-        );
+        });
       }
     }
   };

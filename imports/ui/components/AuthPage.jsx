@@ -1,12 +1,16 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { useTracker } from 'meteor/react-meteor-data';
 import clsx from 'clsx';
-import { Paper, Typography, withStyles } from '@material-ui/core';
+import { Paper } from '@mui/material';
+import { withStyles } from '@mui/styles';
 import Logo from './Logo';
+import Loading from './Loading';
 
 const styles = (theme) => ({
   root: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       height: `${window.innerHeight}px`,
       padding: theme.spacing(1)
     },
@@ -16,7 +20,7 @@ const styles = (theme) => ({
     }
   },
   paper: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       height: '100%',
       padding: theme.spacing(12, 4)
     },
@@ -30,7 +34,12 @@ const styles = (theme) => ({
 });
 
 function AuthPage({ children, className, classes }) {
-  if (Meteor.userId()) {
+  const { userId, loggingIn } = useTracker(() => ({
+    userId: Meteor.userId(),
+    loggingIn: Meteor.loggingIn()
+  }));
+  if (loggingIn) return <Loading />;
+  if (userId) {
     return <Redirect to="/" />;
   }
 

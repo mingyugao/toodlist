@@ -1,21 +1,21 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import reducers from '/imports/ui/reducers';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { store } from '/imports/ui/store';
 import AppRouter from '/imports/startup/client/AppRouter';
 
-const theme = createMuiTheme({});
+const theme = createTheme({
+  breakpoints: { values: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 } }
+});
 
 Meteor.startup(() => {
-  render(
-    <Provider store={createStore(reducers)}>
-      <MuiThemeProvider theme={theme}>
+  createRoot(document.getElementById('react-target')).render(
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
         <AppRouter />
-      </MuiThemeProvider>
-    </Provider>,
-    document.getElementById('react-target')
+      </ThemeProvider>
+    </Provider>
   );
 });

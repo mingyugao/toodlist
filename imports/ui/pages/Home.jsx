@@ -1,10 +1,12 @@
+import { callMethod } from '../callMethod';
+import { PlusOutlined } from '@ant-design/icons';
+import { Random } from 'meteor/random';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Icon from 'antd/lib/icon';
+import { withStyles } from '@mui/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import message from 'antd/lib/message';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import ToodList from '../components/ToodList';
 import Loading from '../components/Loading';
 import Settings from '../components/Settings';
@@ -19,7 +21,6 @@ import {
   homeCreateTodolistSuccess,
   homeCreateTodolistFailure
 } from '../actions/Home';
-import { openSettings } from '../actions/Settings';
 import { Navbar } from '../components';
 
 const styles = (theme) => ({
@@ -27,7 +28,7 @@ const styles = (theme) => ({
     display: 'flex',
     width: '100vw',
     height: '100vh',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column'
     },
     [theme.breakpoints.up('md')]: {
@@ -42,7 +43,7 @@ const styles = (theme) => ({
     '& > div:nth-of-type(1)': {
       display: 'flex'
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexDirection: 'column',
       '& > div:nth-of-type(1)': {
         flexDirection: 'column'
@@ -93,8 +94,6 @@ function Home({
   columnOrder,
   isSettingsOpen,
   getUserData,
-  openSettings,
-  signOut,
   onDragEnd,
   createTodolist
 }) {
@@ -102,9 +101,7 @@ function Home({
     getUserData(history);
   }, []);
 
-  const isMobile = () => {
-    return useMediaQuery((theme) => theme.breakpoints.down('sm'));
-  };
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   const renderedColumns = columnOrder.map((cid, index) => {
     const column = columns[cid];
@@ -125,7 +122,7 @@ function Home({
         <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
           <Droppable
             droppableId="main-droppable-container"
-            direction={isMobile() ? 'vertical' : 'horizontal'}
+            direction={isMobile ? 'vertical' : 'horizontal'}
             type="column"
           >
             {(mainProvided) => (
@@ -139,7 +136,7 @@ function Home({
             className={classes.columnAddPlaceholder}
             onClick={() => createTodolist()}
           >
-            <Icon type="plus" />
+            <PlusOutlined />
             &nbsp;new toodlist
           </div>
         </DragDropContext>
@@ -164,14 +161,16 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getUserData: (history) => {
       dispatch(homeGetUserDataRequest());
-      Meteor.call('getUserData', Meteor.userId(), (err, response) => {
+      callMethod('getUserData', (err, response) => {
         if (err) {
           dispatch(homeGetUserDataFailure());
-          history.push('/');
+          message.error(
+            'Your board could not be loaded. Please refresh to try again.'
+          );
         } else {
           dispatch(
             homeGetUserDataSuccess({
-              email: response.emails[0].address,
+              email: response.emails[0]?.address || '',
               avatarSrc: response.avatarSrc,
               todos: response.todos,
               columns: response.columns,
@@ -185,7 +184,7 @@ const mapDispatchToProps = (dispatch) => {
       const { reason, destination } = result;
       if (reason !== 'CANCEL' && destination) {
         dispatch(homeDragAndDropRequest(result));
-        Meteor.call('dragAndDrop', Meteor.userId(), result, (err, response) => {
+        callMethod('dragAndDrop', result, (err, response) => {
           if (err) {
             dispatch(homeDragAndDropFailure());
             message.error('Your request failed to complete, please try again.');
@@ -197,25 +196,20 @@ const mapDispatchToProps = (dispatch) => {
     },
     createTodolist: () => {
       const newColumn = {
-        id: Date.now(),
+        id: Random.id(),
         title: 'my toodlist',
         todoIds: [],
         color: 'white'
       };
       dispatch(homeCreateTodolistRequest(newColumn));
-      Meteor.call(
-        'createTodolist',
-        Meteor.userId(),
-        newColumn,
-        (err, response) => {
-          if (err) {
-            dispatch(homeCreateTodolistFailure());
-            message.error('Your request failed to complete, please try again.');
-          } else {
-            dispatch(homeCreateTodolistSuccess());
-          }
+      callMethod('createTodolist', newColumn, (err, response) => {
+        if (err) {
+          dispatch(homeCreateTodolistFailure());
+          message.error('Your request failed to complete, please try again.');
+        } else {
+          dispatch(homeCreateTodolistSuccess());
         }
-      );
+      });
     }
   };
 };

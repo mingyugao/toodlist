@@ -1,9 +1,10 @@
+import { callMethod } from '../callMethod';
+import { DeleteOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Icon from 'antd/lib/icon';
 import Input from 'antd/lib/input';
 import message from 'antd/lib/message';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import {
   todoEditRequest,
   todoEditSuccess,
@@ -80,7 +81,7 @@ class Tood extends Component {
               <a onClick={this.toggleEditTodo}>edit</a>
               {' | '}
               <a onClick={this.deleteTodo}>
-                <Icon type="delete" />
+                <DeleteOutlined />
               </a>
             </span>
           </div>
@@ -99,7 +100,7 @@ const mapDispatchToProps = (dispatch) => {
     editTodo: (newTodo) => {
       if (newTodo.content) {
         dispatch(todoEditRequest(newTodo));
-        Meteor.call('editTodo', Meteor.userId(), newTodo, (err, response) => {
+        callMethod('editTodo', newTodo, (err, response) => {
           if (err) {
             dispatch(todoEditFailure());
             message.error('Your request failed to complete, please try again.');
@@ -111,7 +112,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteTodo: (tid) => {
       dispatch(todoDeleteRequest(tid));
-      Meteor.call('deleteTodo', Meteor.userId(), tid, (err, response) => {
+      callMethod('deleteTodo', tid, (err, response) => {
         if (err) {
           dispatch(todoDeleteFailure());
           message.error('Your request failed to complete, please try again.');
