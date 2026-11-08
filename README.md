@@ -2,6 +2,8 @@
 
 A personal todo board with accounts, movable lists and tasks, list colors, and avatars. Runs on Meteor 3.5.4, Node 24, React 18, and MongoDB.
 
+Galaxy address: https://mingyugao-toodlist.sandbox.galaxycloud.app
+
 ## Run locally
 
 Install Node 24, then:
@@ -26,7 +28,15 @@ npm run test:e2e      # Browser signup, persistence, settings, login and access 
 
 Browser tests start the app on 127.0.0.1:3000 when needed and create test accounts in its local database. They use installed Chrome on macOS, or Playwright Chromium elsewhere (`npx playwright install chromium`). They never target a hosted app.
 
-## Deploy to Galaxy with a new database
+## Update the Galaxy app
+
+```sh
+npm run deploy
+```
+
+The default target, account and region are recorded in `galaxy.json`. Updates use the current Galaxy hostname and keep its database. The helper hides database connection strings from deployment output. It does not change the hosting plan.
+
+## Create another Galaxy app with a new database
 
 1. Sign in to the account that will own the app:
 
@@ -44,7 +54,7 @@ Browser tests start the app on 127.0.0.1:3000 when needed and create test accoun
 
 3. Check the app status and logs in the Galaxy dashboard. Verify signup, login, list/task editing, drag-and-drop and persistence after reloading over HTTPS.
 
-Subsequent deployments keep the database configured for that app. Deployment does not run database resets or delete user data. Galaxy may require account verification before enabling deployment. Its free tier currently allows one free app per account and a 256 MB shared database for personal/testing use. Check [current limits](https://docs.galaxycloud.app/docs/billing/free-tier).
+After creation, record the hostname returned by Galaxy in `galaxy.json` before the next update, or pass that full hostname to `npm run deploy -- <hostname>`. Deployment does not run database resets or delete user data. Galaxy requires a valid payment method for account verification, including on the free plan. Its free tier currently allows one free app per account and a 256 MB shared database for personal/testing use. Check [current limits](https://docs.galaxycloud.app/docs/billing/free-tier).
 
 Alternatively, use Galaxy's **Deploy New App → Meteor.js** flow, select this repository and `master`, choose **Free**, enable **Add Free MongoDB**, and set the install command to `meteor npm ci`. Push only reviewed, tested commits to a branch configured for automatic deployment.
 
