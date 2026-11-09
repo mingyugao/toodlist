@@ -4,22 +4,10 @@ export const homeSignOut = () => {
   };
 };
 
-export const homeGetUserDataRequest = () => {
-  return {
-    type: 'HOME_GET_USER_DATA_REQUEST'
-  };
-};
-
 export const homeGetUserDataSuccess = (data) => {
   return {
     type: 'HOME_GET_USER_DATA_SUCCESS',
     payload: data
-  };
-};
-
-export const homeGetUserDataFailure = () => {
-  return {
-    type: 'HOME_GET_USER_DATA_FAILURE'
   };
 };
 

@@ -1,21 +1,17 @@
-import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useTracker } from 'meteor/react-meteor-data';
-import Loading from './Loading';
+import { useAppSession } from './AppSession';
 
 function PrivateRoute({ component: Component, ...rest }) {
-  const { userId, loggingIn } = useTracker(() => ({
-    userId: Meteor.userId(),
-    loggingIn: Meteor.loggingIn()
-  }));
-  if (loggingIn) return <Loading />;
+  const { userId, loggingIn, canShowBoard } = useAppSession();
+  if (loggingIn) return null;
   return (
     <Route
       {...rest}
-      render={(props) =>
-        userId ? <Component {...props} /> : <Redirect to="/login" />
-      }
+      render={(props) => {
+        if (!userId) return <Redirect to="/login" />;
+        return canShowBoard ? <Component {...props} /> : null;
+      }}
     />
   );
 }

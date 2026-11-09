@@ -1,12 +1,10 @@
-import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { useTracker } from 'meteor/react-meteor-data';
 import clsx from 'clsx';
 import { Paper } from '@mui/material';
 import { withStyles } from '@mui/styles';
 import Logo from './Logo';
-import Loading from './Loading';
+import { useAppSession } from './AppSession';
 
 const styles = (theme) => ({
   root: {
@@ -34,11 +32,8 @@ const styles = (theme) => ({
 });
 
 function AuthPage({ children, className, classes }) {
-  const { userId, loggingIn } = useTracker(() => ({
-    userId: Meteor.userId(),
-    loggingIn: Meteor.loggingIn()
-  }));
-  if (loggingIn) return <Loading />;
+  const { userId, loggingIn } = useAppSession();
+  if (loggingIn) return null;
   if (userId) {
     return <Redirect to="/" />;
   }

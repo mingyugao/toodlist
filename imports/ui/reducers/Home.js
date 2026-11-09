@@ -1,6 +1,5 @@
 const homeReducer = (
   state = {
-    isLoading: false,
     email: '',
     avatarSrc: '',
     todos: {},
@@ -9,21 +8,10 @@ const homeReducer = (
   },
   action
 ) => {
-  if (action.type === 'HOME_GET_USER_DATA_REQUEST') {
+  if (action.type === 'HOME_GET_USER_DATA_SUCCESS') {
     return {
       ...state,
-      isLoading: true
-    };
-  } else if (action.type === 'HOME_GET_USER_DATA_SUCCESS') {
-    return {
-      ...state,
-      isLoading: false,
       ...action.payload
-    };
-  } else if (action.type === 'HOME_GET_USER_DATA_FAILURE') {
-    return {
-      ...state,
-      isLoading: false
     };
   } else if (action.type === 'HOME_CREATE_TODOLIST_REQUEST') {
     return {

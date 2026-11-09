@@ -1,19 +1,15 @@
 import { callMethod } from '../callMethod';
 import { PlusOutlined } from '@ant-design/icons';
 import { Random } from 'meteor/random';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@mui/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import message from 'antd/lib/message';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import ToodList from '../components/ToodList';
-import Loading from '../components/Loading';
 import Settings from '../components/Settings';
 import {
-  homeGetUserDataRequest,
-  homeGetUserDataSuccess,
-  homeGetUserDataFailure,
   homeDragAndDropRequest,
   homeDragAndDropSuccess,
   homeDragAndDropFailure,
@@ -87,20 +83,13 @@ const styles = (theme) => ({
 
 function Home({
   classes,
-  history,
-  isLoading,
   todos,
   columns,
   columnOrder,
   isSettingsOpen,
-  getUserData,
   onDragEnd,
   createTodolist
 }) {
-  useEffect(() => {
-    getUserData(history);
-  }, []);
-
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   const renderedColumns = columnOrder.map((cid, index) => {
@@ -142,14 +131,12 @@ function Home({
         </DragDropContext>
       </div>
       <Settings />
-      {isLoading && <Loading />}
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.home.isLoading,
     todos: state.home.todos,
     columns: state.home.columns,
     columnOrder: state.home.columnOrder,
@@ -159,27 +146,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserData: (history) => {
-      dispatch(homeGetUserDataRequest());
-      callMethod('getUserData', (err, response) => {
-        if (err) {
-          dispatch(homeGetUserDataFailure());
-          message.error(
-            'Your board could not be loaded. Please refresh to try again.'
-          );
-        } else {
-          dispatch(
-            homeGetUserDataSuccess({
-              email: response.emails[0]?.address || '',
-              avatarSrc: response.avatarSrc,
-              todos: response.todos,
-              columns: response.columns,
-              columnOrder: response.columnOrder
-            })
-          );
-        }
-      });
-    },
     onDragEnd: (result) => {
       const { reason, destination } = result;
       if (reason !== 'CANCEL' && destination) {
