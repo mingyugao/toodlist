@@ -68,7 +68,9 @@ class Tood extends Component {
             {...todoProvided.draggableProps}
             {...todoProvided.dragHandleProps}
           >
-            {!this.state.isBeingEdited && <span>{todo.content}</span>}
+            {!this.state.isBeingEdited && (
+              <span className="todo-content">{todo.content}</span>
+            )}
             {this.state.isBeingEdited && (
               <Input
                 ref={this.saveTodoRef}
@@ -77,7 +79,7 @@ class Tood extends Component {
                 onPressEnter={this.updateTodo}
               />
             )}
-            <span>
+            <span className="todo-actions">
               <a onClick={this.toggleEditTodo}>edit</a>
               {' | '}
               <a onClick={this.deleteTodo}>
