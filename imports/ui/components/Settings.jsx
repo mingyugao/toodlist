@@ -34,8 +34,7 @@ const styles = (theme) => ({
     },
     [theme.breakpoints.up('md')]: {
       width: '55% !important',
-      height: '100%',
-      paddingTop: '24px'
+      height: 'calc(100% - 48px)'
     },
     '& div.ant-modal-body': {
       flexGrow: '1',
