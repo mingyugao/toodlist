@@ -4,8 +4,8 @@ import Typography from 'antd/lib/typography';
 const { Title } = Typography;
 
 const Loading = () => (
-  <div id="loading">
-    <img src="loading.png" alt="loading" />
+  <div id="loading" className="loading-screen" role="status">
+    <img src="/loading.png" alt="" />
     <Title>Loading...</Title>
   </div>
 );

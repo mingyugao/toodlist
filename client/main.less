@@ -5,9 +5,9 @@ body,
 #react-target {
   min-height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -17,6 +17,47 @@ body {
   background-repeat: repeat;
   background-position: top center;
   background-size: 300px 250px;
+}
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+
+  & > img {
+    display: block;
+    flex-shrink: 0;
+    width: min(18rem, 65vw, 40vh);
+    height: auto;
+    animation: loading-pulse 0.75s ease-in-out infinite alternate;
+  }
+
+  & > h1 {
+    margin: 0;
+  }
+}
+
+@keyframes loading-pulse {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen > img {
+    animation: none;
+  }
 }
 
 /*  */
@@ -323,38 +364,6 @@ body {
           background-color: @green-todo;
         }
       }
-    }
-  }
-
-  & > div#loading {
-    background-color: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-
-    & > img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-
-      @keyframes loading {
-        0% {
-          transform: translate(-50%, -60%) scale(0.6);
-        }
-        100% {
-          transform: translate(-50%, -60%) scale(0.4);
-        }
-      }
-
-      animation: loading 0.75s infinite alternate;
-    }
-
-    & > h1 {
-      position: absolute;
-      bottom: 30%;
-      left: 50%;
-      transform: translateX(-50%);
     }
   }
 }
